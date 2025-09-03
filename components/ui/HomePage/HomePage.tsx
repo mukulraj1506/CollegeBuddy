@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
     Dimensions,
@@ -18,6 +19,7 @@ interface HomePageProps {
 }
 
 const HomePage: React.FC<HomePageProps> = ({ onLoginPress, onSignUpPress }) => {
+  const router = useRouter();
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
 
@@ -43,6 +45,11 @@ const HomePage: React.FC<HomePageProps> = ({ onLoginPress, onSignUpPress }) => {
     // Handle login logic here
     console.log('Login attempt:', { email, password });
     // You can add your authentication logic here
+  };
+
+  const handleLoginSuccess = () => {
+    // Navigate to dashboard after successful login
+    router.push('/dashboard' as any);
   };
 
   const handleSignUp = (username: string, email: string, password: string) => {
@@ -74,6 +81,7 @@ const HomePage: React.FC<HomePageProps> = ({ onLoginPress, onSignUpPress }) => {
         onForgotPassword={handleForgotPassword}
         onSignUp={handleSignUpFromLogin}
         onBack={handleBackFromLogin}
+        onLoginSuccess={handleLoginSuccess}
       />
     );
   }

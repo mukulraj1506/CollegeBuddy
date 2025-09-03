@@ -1,15 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
-    Dimensions,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
@@ -19,6 +19,7 @@ interface LoginProps {
   onForgotPassword?: () => void;
   onSignUp?: () => void;
   onBack?: () => void;
+  onLoginSuccess?: () => void;
 }
 
 const Login: React.FC<LoginProps> = ({
@@ -26,6 +27,7 @@ const Login: React.FC<LoginProps> = ({
   onForgotPassword,
   onSignUp,
   onBack,
+  onLoginSuccess,
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -67,6 +69,7 @@ const Login: React.FC<LoginProps> = ({
 
     if (!hasError) {
       onLogin?.(email.trim(), password);
+      onLoginSuccess?.();
     }
   };
 
