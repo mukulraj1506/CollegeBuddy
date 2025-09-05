@@ -1,21 +1,22 @@
+import { signup } from "@/src/api";
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
-    Dimensions,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
 interface SignUpProps {
-  onSignUp?: (username: string, email: string, password: string) => void;
+  onSignUp?: (name: string, email: string, password: string) => void;
   onLogin?: () => void;
   onBack?: () => void;
 }
@@ -25,13 +26,13 @@ const SignUp: React.FC<SignUpProps> = ({
   onLogin,
   onBack,
 }) => {
-  const [username, setUsername] = useState('');
+  const [name, setname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [usernameError, setUsernameError] = useState('');
+  const [nameError, setnameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
@@ -60,58 +61,78 @@ const SignUp: React.FC<SignUpProps> = ({
   };
 
   // Handle sign up
-  const handleSignUp = () => {
-    // Reset errors
-    setUsernameError('');
-    setEmailError('');
-    setPasswordError('');
-    setConfirmPasswordError('');
+  // adjust path
 
-    let hasError = false;
+const handleSignUp = async () => {
+  // Reset errors
+  setnameError('');
+  setEmailError('');
+  setPasswordError('');
+  setConfirmPasswordError('');
 
-    // Validate username
-    if (!username.trim()) {
-      setUsernameError('Username is required');
-      hasError = true;
-    } else if (username.trim().length < 3) {
-      setUsernameError('Username must be at least 3 characters');
+  let hasError = false;
+
+  // Validate name
+  if (!name.trim()) {
+    setnameError('name is required');
+    hasError = true;
+  } else if (name.trim().length < 3) {
+    setnameError('name must be at least 3 characters');
+    hasError = true;
+  }
+
+  // Validate email
+  if (!email.trim()) {
+    setEmailError('Email is required');
+    hasError = true;
+  } else if (!validateEmail(email.trim())) {
+    setEmailError('Please enter a valid email address');
+    hasError = true;
+  }
+
+  // Validate password
+  if (!password.trim()) {
+    setPasswordError('Password is required');
+    hasError = true;
+  } else {
+    const passwordValidationError = validatePassword(password);
+    if (passwordValidationError) {
+      setPasswordError(passwordValidationError);
       hasError = true;
     }
+  }
 
-    // Validate email
-    if (!email.trim()) {
-      setEmailError('Email is required');
-      hasError = true;
-    } else if (!validateEmail(email.trim())) {
-      setEmailError('Please enter a valid email address');
-      hasError = true;
-    }
+  // Validate confirm password
+  if (!confirmPassword.trim()) {
+    setConfirmPasswordError('Please confirm your password');
+    hasError = true;
+  } else if (password !== confirmPassword) {
+    setConfirmPasswordError('Passwords do not match');
+    hasError = true;
+  }
 
-    // Validate password
-    if (!password.trim()) {
-      setPasswordError('Password is required');
-      hasError = true;
-    } else {
-      const passwordValidationError = validatePassword(password);
-      if (passwordValidationError) {
-        setPasswordError(passwordValidationError);
-        hasError = true;
-      }
-    }
+  // Stop if validation failed
+  if (hasError) return;
 
-    // Validate confirm password
-    if (!confirmPassword.trim()) {
-      setConfirmPasswordError('Please confirm your password');
-      hasError = true;
-    } else if (password !== confirmPassword) {
-      setConfirmPasswordError('Passwords do not match');
-      hasError = true;
-    }
+  try {
+    // ✅ Call backend API
+    const response = await signup({
+      name: name.trim(),
+      email: email.trim(),
+      password,
+    });
 
-    if (!hasError) {
-      onSignUp?.(username.trim(), email.trim(), password);
-    }
-  };
+    console.log("Signup success:", response.data);
+
+    // Optionally, navigate to login or dashboard after signup
+    // router.push("/login" as any);
+
+  } catch (error: any) {
+    console.error("Signup failed:", error.response?.data || error.message);
+    // You can also show error to user
+    setEmailError("Signup failed, please try again.");
+  }
+};
 
   // Toggle password visibility
   const togglePasswordVisibility = () => {
@@ -142,22 +163,22 @@ const SignUp: React.FC<SignUpProps> = ({
 
         {/* Form */}
         <View style={styles.form}>
-          {/* Username Field */}
+          {/* name Field */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Username *</Text>
+            <Text style={styles.label}>name *</Text>
             <TextInput
-              style={[styles.input, usernameError ? styles.inputError : null]}
-              placeholder="Enter your username"
+              style={[styles.input, nameError ? styles.inputError : null]}
+              placeholder="Enter your name"
               placeholderTextColor="#999"
-              value={username}
+              value={name}
               onChangeText={(text) => {
-                setUsername(text);
-                if (usernameError) setUsernameError('');
+                setname(text);
+                if (nameError) setnameError('');
               }}
               autoCapitalize="none"
               autoCorrect={false}
             />
-            {usernameError ? <Text style={styles.errorText}>{usernameError}</Text> : null}
+            {nameError ? <Text style={styles.errorText}>{nameError}</Text> : null}
           </View>
 
           {/* Email Field */}
