@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import {
     Image,
@@ -7,15 +8,21 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { globalStyles } from '../../../styles/globalStyles';
 
 interface Item {
   id: string;
   name: string;
   price: string;
   condition: string;
+  category?: string;
+  description?: string;
   image: any;
+  images?: string[];
   seller: string;
   location: string;
+  negotiable?: boolean;
+  postedDate?: string;
 }
 
 interface ItemCardProps {
@@ -24,8 +31,30 @@ interface ItemCardProps {
 }
 
 const ItemCard: React.FC<ItemCardProps> = ({ item, onPress }) => {
+  const router = useRouter();
+
   const handlePress = () => {
     onPress?.(item);
+  };
+
+  const handleViewDetails = () => {
+    // Navigate to item details page with item data as params
+    router.push({
+      pathname: '/item-details',
+      params: {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        condition: item.condition,
+        category: item.category || '',
+        description: item.description || '',
+        seller: item.seller,
+        location: item.location,
+        negotiable: item.negotiable?.toString() || 'false',
+        postedDate: item.postedDate || '',
+        images: item.images ? JSON.stringify(item.images) : '[]',
+      }
+    });
   };
 
   return (
@@ -55,17 +84,13 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, onPress }) => {
           <Ionicons name="location-outline" size={16} color="#666" />
           <Text style={styles.locationText}>{item.location}</Text>
         </View>
-        
-        <View style={styles.actionButtons}>
-          <TouchableOpacity style={styles.messageButton}>
-            <Ionicons name="chatbubble-outline" size={16} color="#06498e" />
-            <Text style={styles.messageButtonText}>Message</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.buyButton}>
-            <Text style={styles.buyButtonText}>Buy Now</Text>
-          </TouchableOpacity>
-        </View>
+      </View>
+      
+      {/* View Details Button */}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.viewDetailsButton} onPress={handleViewDetails}>
+          <Text style={styles.viewDetailsButtonText}>View Details</Text>
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
@@ -76,8 +101,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#fff',
     borderRadius: 12,
-    padding: 15,
-    marginBottom: 15,
+    ...globalStyles.paddingCard,
+    marginBottom: 12,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -86,24 +111,28 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 3,
+    alignItems: 'center',
   },
   imageContainer: {
     position: 'relative',
-    marginRight: 15,
+    marginRight: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
-    width: 80,
-    height: 80,
+    width: 70,
+    height: 70,
     borderRadius: 8,
   },
   conditionBadge: {
     position: 'absolute',
-    top: -5,
-    right: -5,
+    top: -3,
+    right: -3,
     backgroundColor: '#4CAF50',
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderRadius: 10,
+    borderRadius: 8,
+    zIndex: 1,
   },
   conditionText: {
     color: '#fff',
@@ -112,68 +141,55 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   itemName: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
     color: '#333',
-    marginBottom: 8,
-    lineHeight: 20,
+    marginBottom: 4,
+    lineHeight: 18,
   },
   price: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#06498e',
-    marginBottom: 8,
+    marginBottom: 4,
   },
   sellerInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   sellerText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#666',
     marginLeft: 4,
   },
   locationInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 0,
   },
   locationText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#666',
     marginLeft: 4,
   },
-  actionButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  buttonContainer: {
+    justifyContent: 'center',
     alignItems: 'center',
+    paddingLeft: 8,
   },
-  messageButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderWidth: 1,
-    borderColor: '#06498e',
-    borderRadius: 16,
-  },
-  messageButtonText: {
-    fontSize: 12,
-    color: '#06498e',
-    marginLeft: 4,
-    fontWeight: '500',
-  },
-  buyButton: {
+  viewDetailsButton: {
     backgroundColor: '#06498e',
-    paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 16,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    alignItems: 'center',
+    minWidth: 80,
   },
-  buyButtonText: {
+  viewDetailsButtonText: {
     color: '#fff',
     fontSize: 12,
     fontWeight: '600',

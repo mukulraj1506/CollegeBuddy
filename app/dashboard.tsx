@@ -1,4 +1,4 @@
-import BuyPage from '@/components/ui/BuyPage';
+import MainNavigation from '@/components/ui/MainNavigation';
 import { useRouter } from 'expo-router';
 import React from 'react';
 
@@ -10,7 +10,7 @@ export default function DashboardScreen() {
     router.replace('/');
   };
 
-  return <BuyPage onLogout={handleLogout} />;
+  return <MainNavigation onLogout={handleLogout} />;
 }
 
 

@@ -135,4 +135,38 @@ export const globalStyles = StyleSheet.create({
     color: '#666',
     fontStyle: 'italic',
   },
+
+  // Shared padding classes
+  paddingHorizontal: {
+    paddingHorizontal: 10,
+  },
+  paddingVertical: {
+    paddingVertical: 10,
+  },
+  paddingTop: {
+    paddingTop: 10,
+  },
+  paddingBottom: {
+    paddingBottom: 10,
+  },
+  paddingCard: {
+    padding: 12,
+  },
+  paddingSection: {
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  paddingHeader: {
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  paddingContent: {
+    paddingHorizontal: 10,
+    paddingTop:  10,
+  },
+  paddingActionButtons: {
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  },
 });

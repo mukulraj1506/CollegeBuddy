@@ -323,7 +323,14 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
             style={[styles.input, styles.priceInput]}
             placeholder="0.00"
             value={formData.price}
-            onChangeText={(value) => handleInputChange('price', value)}
+            onChangeText={(value) => {
+              // Only allow numbers and decimal point
+              const numericValue = value.replace(/[^0-9.]/g, '');
+              // Prevent multiple decimal points
+              const parts = numericValue.split('.');
+              const finalValue = parts.length > 2 ? parts[0] + '.' + parts.slice(1).join('') : numericValue;
+              handleInputChange('price', finalValue);
+            }}
             keyboardType="numeric"
           />
         </View>

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import {
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import PreviousItems from './PreviousItems';
 import SellNewItem from './SellNewItem';
@@ -21,24 +21,30 @@ const SellPage: React.FC<SellPageProps> = ({ onLogout }) => {
       id: '1',
       name: 'Physics Textbook',
       price: '$35.00',
-      status: 'Sold',
+      status: 'Sold' as const,
       date: '2024-01-15',
+      condition: 'Like New' as const,
+      category: 'Textbooks' as const,
       image: require('@/assets/images/HomePage/HomePage.png'),
     },
     {
       id: '2',
       name: 'Chemistry Lab Kit',
       price: '$20.00',
-      status: 'Active',
+      status: 'Active' as const,
       date: '2024-01-10',
+      condition: 'Good' as const,
+      category: 'Electronics' as const,
       image: require('@/assets/images/HomePage/HomePage.png'),
     },
     {
       id: '3',
       name: 'Math Calculator',
       price: '$15.00',
-      status: 'Sold',
+      status: 'Sold' as const,
       date: '2024-01-05',
+      condition: 'New' as const,
+      category: 'Electronics' as const,
       image: require('@/assets/images/HomePage/HomePage.png'),
     },
   ];
@@ -100,7 +106,7 @@ const SellPage: React.FC<SellPageProps> = ({ onLogout }) => {
             styles.sellNavText,
             activeSellTab === 'New' && styles.activeSellNavText
           ]}>
-            Sell Something New
+            Upload New Item
           </Text>
         </TouchableOpacity>
       </View>
@@ -119,7 +125,7 @@ const styles = StyleSheet.create({
   sellNavigation: {
     flexDirection: 'row',
     backgroundColor: '#fff',
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',

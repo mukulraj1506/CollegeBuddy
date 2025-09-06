@@ -8,8 +8,8 @@ import {
 } from 'react-native';
 
 interface BottomNavigationProps {
-  activeTab: 'Buy' | 'Sell' | 'Orders' | 'Chats';
-  onTabPress: (tab: 'Buy' | 'Sell' | 'Orders' | 'Chats') => void;
+  activeTab: 'Buy' | 'Sell' | 'Wishlist' | 'Chats';
+  onTabPress: (tab: 'Buy' | 'Sell' | 'Wishlist' | 'Chats') => void;
 }
 
 const BottomNavigation: React.FC<BottomNavigationProps> = ({
@@ -19,7 +19,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
   const tabs = [
     { key: 'Buy' as const, icon: 'cart', label: 'Buy' },
     { key: 'Sell' as const, icon: 'add-circle-outline', label: 'Sell' },
-    { key: 'Orders' as const, icon: 'list-outline', label: 'Orders' },
+    { key: 'Wishlist' as const, icon: 'heart-outline', label: 'Wishlist' },
     { key: 'Chats' as const, icon: 'chatbubbles-outline', label: 'Chats' },
   ];
 
