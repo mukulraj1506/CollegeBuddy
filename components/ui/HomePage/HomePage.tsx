@@ -1,6 +1,8 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  Animated,
   Dimensions,
   Image,
   StyleSheet,
@@ -22,6 +24,40 @@ const HomePage: React.FC<HomePageProps> = ({ onLoginPress, onSignUpPress }) => {
   const router = useRouter();
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showWelcomeScreen, setShowWelcomeScreen] = useState(false);
+  const fadeAnim = new Animated.Value(0);
+
+  // Check if user is already logged in when component mounts
+  useEffect(() => {
+    // For now, we'll simulate checking if user is logged in
+    // In a real app, you would check AsyncStorage or your auth state here
+    const checkLoginState = () => {
+      // This is a placeholder - in a real app you would check persistent storage
+      // const isUserLoggedIn = await AsyncStorage.getItem('isLoggedIn');
+      // if (isUserLoggedIn === 'true') {
+      //   setIsLoggedIn(true);
+      //   setShowWelcomeScreen(true);
+      //   // Show welcome screen and then navigate to dashboard
+      //   Animated.timing(fadeAnim, {
+      //     toValue: 1,
+      //     duration: 500,
+      //     useNativeDriver: true,
+      //   }).start();
+      //   setTimeout(() => {
+      //     Animated.timing(fadeAnim, {
+      //       toValue: 0,
+      //       duration: 500,
+      //       useNativeDriver: true,
+      //     }).start(() => {
+      //       router.push('/dashboard' as any);
+      //     });
+      //   }, 1000);
+      // }
+    };
+    
+    checkLoginState();
+  }, []);
 
   const handleLoginPress = () => {
     setShowLogin(true);
@@ -47,19 +83,36 @@ const HomePage: React.FC<HomePageProps> = ({ onLoginPress, onSignUpPress }) => {
   };
 
   const handleLoginSuccess = () => {
-    // Navigate to dashboard after successful login
-    router.push('/dashboard' as any);
+    // Set logged in state and show welcome screen
+    setIsLoggedIn(true);
+    setShowWelcomeScreen(true);
+    
+    // Start fade in animation
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+
+    // After 1 second, fade out and navigate to dashboard
+    setTimeout(() => {
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        router.push('/dashboard' as any);
+      });
+    }, 1000);
   };
 
   const handleSignUp = (username: string, email: string, password: string) => {
     // Handle sign up logic here
-    console.log('Sign up attempt:', { username, email, password });
     // You can add your registration logic here
   };
 
   const handleForgotPassword = () => {
     // Handle forgot password logic here
-    console.log('Forgot password pressed');
   };
 
   const handleSignUpFromLogin = () => {
@@ -93,6 +146,33 @@ const HomePage: React.FC<HomePageProps> = ({ onLoginPress, onSignUpPress }) => {
         onLogin={handleLoginFromSignUp}
         onBack={handleBackFromSignUp}
       />
+    );
+  }
+
+  // If user is logged in and welcome screen should be shown
+  if (isLoggedIn && showWelcomeScreen) {
+    return (
+      <View style={styles.welcomeContainer}>
+        <Animated.View style={[styles.welcomeContent, { opacity: fadeAnim }]}>
+          {/* App Image */}
+          <View style={styles.welcomeImageContainer}>
+            <Image
+              source={require('@/assets/images/HomePage/HomePage.png')}
+              style={styles.welcomeImage}
+              resizeMode="contain"
+            />
+          </View>
+          
+          {/* App Name */}
+          <Text style={styles.welcomeAppTitle}>CollegeBuddy</Text>
+          
+          {/* Made with heart in India */}
+          <View style={styles.heartMessageContainer}>
+            <Ionicons name="heart" size={16} color="#e74c3c" />
+            <Text style={styles.heartMessage}>Made with heart in India</Text>
+          </View>
+        </Animated.View>
+      </View>
     );
   }
 
@@ -202,6 +282,46 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  // Welcome screen styles
+  welcomeContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f0f0f0',
+  },
+  welcomeContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  welcomeImageContainer: {
+    width: width * 0.6,
+    height: height * 0.3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  welcomeImage: {
+    width: '100%',
+    height: '100%',
+  },
+  welcomeAppTitle: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#06498e',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  heartMessageContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  heartMessage: {
+    fontSize: 16,
+    color: '#666',
+    marginLeft: 8,
+    fontStyle: 'italic',
   },
 });
 
