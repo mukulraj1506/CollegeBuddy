@@ -23,14 +23,16 @@ interface Item {
   location: string;
   negotiable?: boolean;
   postedDate?: string;
+  status?: 'Active' | 'Sold';
 }
 
 interface ItemCardProps {
   item: Item;
   onPress?: (item: Item) => void;
+  showStatus?: boolean;
 }
 
-const ItemCard: React.FC<ItemCardProps> = ({ item, onPress }) => {
+const ItemCard: React.FC<ItemCardProps> = ({ item, onPress, showStatus = false }) => {
   const router = useRouter();
 
   const handlePress = () => {
@@ -40,7 +42,7 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, onPress }) => {
   const handleViewDetails = () => {
     // Navigate to item details page with item data as params
     router.push({
-      pathname: '/item-details',
+      pathname: '/item-details' as any,
       params: {
         id: item.id,
         name: item.name,
@@ -74,6 +76,17 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, onPress }) => {
         </Text>
         
         <Text style={styles.price}>{item.price}</Text>
+        
+        {showStatus && item.status && (
+          <View style={styles.statusContainer}>
+            <Text style={[
+              styles.statusText,
+              { color: item.status === 'Sold' ? '#4CAF50' : '#FF9800' }
+            ]}>
+              {item.status}
+            </Text>
+          </View>
+        )}
         
         <View style={styles.sellerInfo}>
           <Ionicons name="person-outline" size={16} color="#666" />
@@ -175,6 +188,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666',
     marginLeft: 4,
+  },
+  statusContainer: {
+    marginBottom: 4,
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '600',
+    textTransform: 'uppercase',
   },
   buttonContainer: {
     justifyContent: 'center',

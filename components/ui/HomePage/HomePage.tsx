@@ -1,12 +1,12 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-    Dimensions,
-    Image,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import Login from '../Login';
 import SignUp from '../SignUp';
@@ -43,7 +43,6 @@ const HomePage: React.FC<HomePageProps> = ({ onLoginPress, onSignUpPress }) => {
 
   const handleLogin = (email: string, password: string) => {
     // Handle login logic here
-    console.log('Login attempt:', { email, password });
     // You can add your authentication logic here
   };
 

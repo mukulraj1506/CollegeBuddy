@@ -1,14 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
-    Alert,
-    Image,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { globalStyles } from '../../../styles/globalStyles';
 
@@ -59,7 +59,6 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
   };
 
   const handleSubmit = () => {
-    console.log('Form submitted:', { ...formData, photos });
     onSubmit?.({ ...formData, photos });
   };
 
@@ -90,8 +89,8 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
   };
 
   return (
-    <ScrollView 
-      style={styles.formContainer} 
+    <ScrollView
+      style={styles.formContainer}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ overflow: 'visible' }}
     >
@@ -125,7 +124,7 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Photos</Text>
         <Text style={styles.sectionSubtitle}>Add up to 10 photos. First photo will be the cover image.</Text>
-        
+
         <View style={styles.photosContainer}>
           {photos.map((photo, index) => (
             <View key={index} style={styles.photoItem}>
@@ -135,7 +134,7 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
                   <Text style={styles.coverText}>Cover</Text>
                 </View>
               )}
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={styles.removePhotoButton}
                 onPress={() => handleRemovePhoto(index)}
               >
@@ -143,7 +142,7 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
               </TouchableOpacity>
             </View>
           ))}
-          
+
           {photos.length < 10 && (
             <TouchableOpacity style={styles.addPhotoButton} onPress={handleAddPhoto}>
               <Ionicons name="camera" size={24} color="#06498e" />
@@ -151,7 +150,7 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
             </TouchableOpacity>
           )}
         </View>
-        
+
         <View style={styles.photoOptions}>
           <TouchableOpacity style={styles.photoOption} onPress={() => console.log('Camera')}>
             <Ionicons name="camera" size={20} color="#06498e" />
@@ -178,14 +177,14 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
             ]}>
               {formData.category || 'Select Category'}
             </Text>
-            <Ionicons 
-              name={showCategoryDropdown ? "chevron-up" : "chevron-down"} 
-              size={20} 
-              color="#666" 
+            <Ionicons
+              name={showCategoryDropdown ? "chevron-up" : "chevron-down"}
+              size={20}
+              color="#666"
               style={globalStyles.dropdownIcon}
             />
           </TouchableOpacity>
-          
+
           {showCategoryDropdown && (
             <View style={[globalStyles.dropdownList, { position: 'absolute', top: 50 }]}>
               {/* Search Bar */}
@@ -205,8 +204,8 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
                   </TouchableOpacity>
                 )}
               </View>
-              
-              <ScrollView 
+
+              <ScrollView
                 style={{ maxHeight: 160 }}
                 showsVerticalScrollIndicator={false}
                 nestedScrollEnabled={true}
@@ -253,14 +252,14 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
             ]}>
               {formData.condition || 'Select Condition'}
             </Text>
-            <Ionicons 
-              name={showConditionDropdown ? "chevron-up" : "chevron-down"} 
-              size={20} 
-              color="#666" 
+            <Ionicons
+              name={showConditionDropdown ? "chevron-up" : "chevron-down"}
+              size={20}
+              color="#666"
               style={globalStyles.dropdownIcon}
             />
           </TouchableOpacity>
-          
+
           {showConditionDropdown && (
             <View style={[globalStyles.dropdownList, { position: 'absolute', top: 50 }]}>
               {/* Search Bar */}
@@ -280,8 +279,8 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
                   </TouchableOpacity>
                 )}
               </View>
-              
-              <ScrollView 
+
+              <ScrollView
                 style={{ maxHeight: 160 }}
                 showsVerticalScrollIndicator={false}
                 nestedScrollEnabled={true}
@@ -334,7 +333,7 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
             keyboardType="numeric"
           />
         </View>
-        
+
         <TouchableOpacity
           style={globalStyles.checkboxContainer}
           onPress={() => handleInputChange('negotiable', !formData.negotiable)}
@@ -362,8 +361,8 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
 const styles = StyleSheet.create({
   formContainer: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingHorizontal: 10,
+    paddingTop: 10,
     overflow: 'visible',
   },
   section: {
@@ -496,10 +495,10 @@ const styles = StyleSheet.create({
   // Submit button styles
   submitButton: {
     backgroundColor: '#06498e',
-    paddingVertical: 16,
+    paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   submitButtonText: {
     color: '#fff',

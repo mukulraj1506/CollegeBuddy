@@ -1,3 +1,4 @@
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
   StyleSheet,
@@ -13,6 +14,7 @@ interface SellPageProps {
 }
 
 const SellPage: React.FC<SellPageProps> = ({ onLogout }) => {
+  const router = useRouter();
   const [activeSellTab, setActiveSellTab] = useState<'Previous' | 'New'>('Previous');
 
   // Sample data for previous items
@@ -52,23 +54,38 @@ const SellPage: React.FC<SellPageProps> = ({ onLogout }) => {
 
   const handleSellTabPress = (tab: 'Previous' | 'New') => {
     setActiveSellTab(tab);
-    console.log(`Sell tab pressed: ${tab}`);
   };
 
-  const handleItemAction = (itemId: string) => {
-    console.log('Item action pressed for:', itemId);
-    // TODO: Handle item actions (edit, delete, etc.)
+  const handleViewItemDetails = (itemId: string) => {
+    
+    // Find the item data
+    const item = previousItems.find(item => item.id === itemId);
+    if (!item) return;
+    
+    // Navigate to sell item details page
+    router.push({
+      pathname: '/sell-item-details' as any,
+      params: {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        condition: item.condition || '',
+        category: item.category || '',
+        status: item.status,
+        date: item.date,
+        description: 'Sample description for the item', // You can add this to your data structure
+      }
+    });
   };
 
   const handleFormSubmit = (formData: any) => {
-    console.log('Form submitted:', formData);
     // TODO: Submit form data
   };
 
   const renderPreviousItems = () => (
     <PreviousItems 
       items={previousItems} 
-      onItemAction={handleItemAction}
+      onViewItemDetails={handleViewItemDetails}
     />
   );
 
@@ -91,7 +108,7 @@ const SellPage: React.FC<SellPageProps> = ({ onLogout }) => {
             styles.sellNavText,
             activeSellTab === 'Previous' && styles.activeSellNavText
           ]}>
-            Previous Items
+            Uploaded Items
           </Text>
         </TouchableOpacity>
         

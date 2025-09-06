@@ -17,10 +17,10 @@ interface PreviousItemsProps {
     condition?: 'New' | 'Like New' | 'Good' | 'Fair' | 'Poor';
     category?: 'Textbooks' | 'Electronics' | 'Clothing' | 'Accessories' | 'Other';
   }>;
-  onItemAction?: (itemId: string) => void;
+  onViewItemDetails?: (itemId: string) => void;
 }
 
-const PreviousItems: React.FC<PreviousItemsProps> = ({ items, onItemAction }) => {
+const PreviousItems: React.FC<PreviousItemsProps> = ({ items, onViewItemDetails }) => {
   // Search and filter state
   const [searchAndFilter, setSearchAndFilter] = useState<SearchAndFilterState<SellFilters>>({
     searchQuery: '',
@@ -125,7 +125,7 @@ const PreviousItems: React.FC<PreviousItemsProps> = ({ items, onItemAction }) =>
             <PreviousItemsCard
               key={item.id}
               item={item}
-              onActionPress={() => onItemAction?.(item.id)}
+              onViewDetails={() => onViewItemDetails?.(item.id)}
             />
           ))}
         </ScrollView>

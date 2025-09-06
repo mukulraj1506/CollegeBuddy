@@ -15,10 +15,10 @@ interface PreviousItemsCardProps {
     status: string;
     date: string;
   };
-  onActionPress?: () => void;
+  onViewDetails?: () => void;
 }
 
-const PreviousItemsCard: React.FC<PreviousItemsCardProps> = ({ item, onActionPress }) => {
+const PreviousItemsCard: React.FC<PreviousItemsCardProps> = ({ item, onViewDetails }) => {
   return (
     <View style={styles.itemCard}>
       <View style={styles.itemImage}>
@@ -27,6 +27,7 @@ const PreviousItemsCard: React.FC<PreviousItemsCardProps> = ({ item, onActionPre
       <View style={styles.itemDetails}>
         <Text style={styles.itemName}>{item.name}</Text>
         <Text style={styles.itemPrice}>{item.price}</Text>
+        <Text style={styles.itemDate}>{item.date}</Text>
         <View style={styles.itemMeta}>
           <Text style={[
             styles.itemStatus,
@@ -34,11 +35,14 @@ const PreviousItemsCard: React.FC<PreviousItemsCardProps> = ({ item, onActionPre
           ]}>
             {item.status}
           </Text>
-          <Text style={styles.itemDate}>{item.date}</Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.actionButton} onPress={onActionPress}>
-        <Ionicons name="ellipsis-vertical" size={20} color="#666" />
+      <TouchableOpacity 
+        style={styles.viewDetailsButton} 
+        onPress={onViewDetails}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.viewDetailsButtonText}>View Details</Text>
       </TouchableOpacity>
     </View>
   );
@@ -59,6 +63,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
+    alignItems: 'center',
   },
   itemImage: {
     width: 60,
@@ -82,11 +87,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#06498e',
+    marginBottom: 4,
+  },
+  itemDate: {
+    fontSize: 12,
+    color: '#666',
     marginBottom: 8,
   },
   itemMeta: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
   itemStatus: {
@@ -94,14 +104,28 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textTransform: 'uppercase',
   },
-  itemDate: {
-    fontSize: 12,
-    color: '#666',
-  },
-  actionButton: {
-    padding: 8,
+  viewDetailsButton: {
+    backgroundColor: '#06498e',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
+    minWidth: 90,
+    marginLeft: 12,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  viewDetailsButtonText: {
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '600',
   },
 });
 

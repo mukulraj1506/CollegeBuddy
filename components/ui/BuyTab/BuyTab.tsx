@@ -1,23 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import { useRouter } from 'expo-router';
+import React from 'react';
 import {
-    ScrollView,
     StyleSheet,
+    View,
 } from 'react-native';
-import { globalStyles } from '../../../styles/globalStyles';
-import ItemCard from '../BuyPage/ItemCard';
-import NoResultsFound from '../NoResultsFound';
-import { BuyFilterModal, BuyFilters, SearchAndFilterState, SearchBar } from '../SearchAndFilter';
+import { ItemList } from '../Common';
 
 const BuyTab: React.FC = () => {
-  // Search and filter state
-  const [searchAndFilter, setSearchAndFilter] = useState<SearchAndFilterState<BuyFilters>>({
-    searchQuery: '',
-    filters: {},
-    isFilterModalOpen: false,
-  });
-
-  // Separate state for the input value (what user types)
-  const [inputValue, setInputValue] = useState('');
+  const router = useRouter();
 
   // Sample data for items (with additional properties for filtering)
   const sampleItems = [
@@ -31,7 +21,10 @@ const BuyTab: React.FC = () => {
       datePosted: '2024-01-15',
       image: require('@/assets/images/HomePage/HomePage.png'),
       seller: 'John D.',
-      location: 'Engineering Building'
+      location: 'Engineering Building',
+      negotiable: true,
+      description: 'Comprehensive calculus textbook covering all major topics.',
+      images: []
     },
     {
       id: '2',
@@ -43,7 +36,10 @@ const BuyTab: React.FC = () => {
       datePosted: '2024-01-10',
       image: require('@/assets/images/HomePage/HomePage.png'),
       seller: 'Sarah M.',
-      location: 'Math Department'
+      location: 'Math Department',
+      negotiable: false,
+      description: 'TI-84 Plus calculator in good working condition.',
+      images: []
     },
     {
       id: '3',
@@ -55,7 +51,10 @@ const BuyTab: React.FC = () => {
       datePosted: '2024-01-05',
       image: require('@/assets/images/HomePage/HomePage.png'),
       seller: 'Mike R.',
-      location: 'Science Lab'
+      location: 'Science Lab',
+      negotiable: true,
+      description: 'Brand new lab coat, never used.',
+      images: []
     },
     {
       id: '4',
@@ -67,142 +66,52 @@ const BuyTab: React.FC = () => {
       datePosted: '2024-01-20',
       image: require('@/assets/images/HomePage/HomePage.png'),
       seller: 'Alex K.',
-      location: 'Computer Science'
+      location: 'Computer Science',
+      negotiable: false,
+      description: 'Handwritten programming notes from CS101.',
+      images: []
     }
   ];
 
-  // Filter and search logic
-  const filteredItems = useMemo(() => {
-    let filtered = [...sampleItems];
-
-    // Apply search query
-    if (searchAndFilter.searchQuery) {
-      const query = searchAndFilter.searchQuery.toLowerCase();
-      filtered = filtered.filter(item =>
-        item.name.toLowerCase().includes(query) ||
-        item.seller.toLowerCase().includes(query) ||
-        item.location.toLowerCase().includes(query)
-      );
-    }
-
-    // Apply filters
-    const { filters } = searchAndFilter;
-
-    // Price range filter
-    if (filters.priceRange) {
-      filtered = filtered.filter(item =>
-        item.priceValue >= filters.priceRange!.min &&
-        item.priceValue <= filters.priceRange!.max
-      );
-    }
-
-    // Condition filter
-    if (filters.condition && filters.condition.length > 0) {
-      filtered = filtered.filter(item =>
-        filters.condition!.includes(item.condition)
-      );
-    }
-
-    // Category filter
-    if (filters.category && filters.category.length > 0) {
-      filtered = filtered.filter(item =>
-        filters.category!.includes(item.category)
-      );
-    }
-
-    // Date posted sort
-    if (filters.datePosted) {
-      filtered.sort((a, b) => {
-        const dateA = new Date(a.datePosted);
-        const dateB = new Date(b.datePosted);
-        return filters.datePosted === 'asc' 
-          ? dateA.getTime() - dateB.getTime()
-          : dateB.getTime() - dateA.getTime();
-      });
-    }
-
-    // Price sort
-    if (filters.priceSort) {
-      filtered.sort((a, b) => {
-        return filters.priceSort === 'low-to-high'
-          ? a.priceValue - b.priceValue
-          : b.priceValue - a.priceValue;
-      });
-    }
-
-    return filtered;
-  }, [searchAndFilter]);
-
-  // Event handlers
-  const handleSearchChange = (query: string) => {
-    setInputValue(query);
-  };
-
-  const handleSearchPress = () => {
-    setSearchAndFilter(prev => ({ ...prev, searchQuery: inputValue }));
-  };
-
-  const handleFilterPress = () => {
-    setSearchAndFilter(prev => ({ ...prev, isFilterModalOpen: true }));
-  };
-
-  const handleCloseFilterModal = () => {
-    setSearchAndFilter(prev => ({ ...prev, isFilterModalOpen: false }));
-  };
-
-  const handleApplyFilters = (filters: BuyFilters) => {
-    setSearchAndFilter(prev => ({ ...prev, filters }));
-  };
-
-  const handleClearFilters = () => {
-    setSearchAndFilter(prev => ({ ...prev, filters: {}, searchQuery: '' }));
-    setInputValue('');
+  const handleItemPress = (item: any) => {
+    // Navigate to item details page
+    router.push({
+      pathname: '/item-details' as any,
+      params: {
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        condition: item.condition,
+        category: item.category || '',
+        description: item.description || '',
+        seller: item.seller,
+        location: item.location,
+        negotiable: item.negotiable?.toString() || 'false',
+        postedDate: item.datePosted || '',
+        images: item.images ? JSON.stringify(item.images) : '[]',
+      }
+    });
   };
 
   return (
-    <>
-      {/* Search and Filter Bar */}
-      <SearchBar
-        searchQuery={inputValue}
-        onSearchChange={handleSearchChange}
-        onSearchPress={handleSearchPress}
-        onFilterPress={handleFilterPress}
-        placeholder="Search items..."
+    <View style={styles.container}>
+      <ItemList
+        items={sampleItems}
+        onItemPress={handleItemPress}
+        placeholder={{
+          title: "No items found",
+          subtitle: "Try adjusting your search terms or filter criteria to find items.",
+          icon: "search-outline"
+        }}
       />
-
-      {/* Items List or No Results */}
-      {filteredItems.length > 0 ? (
-        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-          {filteredItems.map((item) => (
-            <ItemCard key={item.id} item={item} />
-          ))}
-        </ScrollView>
-      ) : (
-        <NoResultsFound
-          title="No items found"
-          subtitle="Try adjusting your search terms or filter criteria to find what you're looking for."
-          icon="search-outline"
-          onClearFilters={handleClearFilters}
-          showClearButton={searchAndFilter.searchQuery !== '' || Object.keys(searchAndFilter.filters).length > 0}
-        />
-      )}
-
-      {/* Filter Modal */}
-      <BuyFilterModal
-        visible={searchAndFilter.isFilterModalOpen}
-        filters={searchAndFilter.filters}
-        onClose={handleCloseFilterModal}
-        onApplyFilters={handleApplyFilters}
-        onClearFilters={handleClearFilters}
-      />
-    </>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  content: {
+  container: {
     flex: 1,
-    ...globalStyles.paddingContent,
+    backgroundColor: '#f5f5f5',
   },
 });
 

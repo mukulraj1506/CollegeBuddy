@@ -15,28 +15,35 @@ const MainNavigation: React.FC<MainNavigationProps> = ({ onLogout }) => {
   const [activeTab, setActiveTab] = useState<'Buy' | 'Sell' | 'Wishlist' | 'Chats'>('Buy');
 
   const handleHomePress = () => {
-    console.log('Home pressed');
     // TODO: Navigate to home page
   };
 
   const handleSearchPress = () => {
-    console.log('Search pressed');
     // TODO: Open search functionality
   };
 
   const handleNotificationPress = () => {
-    console.log('Notifications pressed');
     // TODO: Navigate to notifications
   };
 
   const handleProfilePress = () => {
-    console.log('Profile pressed');
     // TODO: Navigate to profile
+  };
+
+  const handleEditProfile = () => {
+    // TODO: Navigate to edit profile page
+  };
+
+  const handleContactUs = () => {
+    // TODO: Navigate to contact us page or open contact form
+  };
+
+  const handleLogout = () => {
+    onLogout?.();
   };
 
   const handleTabPress = (tab: 'Buy' | 'Sell' | 'Wishlist' | 'Chats') => {
     setActiveTab(tab);
-    console.log(`Tab pressed: ${tab}`);
   };
 
   const getPageName = () => {
@@ -77,6 +84,9 @@ const MainNavigation: React.FC<MainNavigationProps> = ({ onLogout }) => {
         onSearchPress={handleSearchPress}
         onNotificationPress={handleNotificationPress}
         onProfilePress={handleProfilePress}
+        onEditProfile={handleEditProfile}
+        onContactUs={handleContactUs}
+        onLogout={handleLogout}
         hasNotifications={true}
         showSearchIcon={getShowSearchIcon()}
       />

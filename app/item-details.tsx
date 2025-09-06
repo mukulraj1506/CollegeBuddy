@@ -5,6 +5,9 @@ import React from 'react';
 export default function ItemDetailsScreen() {
   const params = useLocalSearchParams();
   
+  // Check if this item is from wishlist
+  const isFromWishlist = params.fromWishlist === 'true';
+
   // Mock item data - in real app, this would come from API or state management
   const mockItem = {
     id: params.id as string || '1',
@@ -25,22 +28,18 @@ export default function ItemDetailsScreen() {
   };
 
   const handleMessageSeller = (sellerId: string) => {
-    console.log('Message seller:', sellerId);
     // TODO: Navigate to chat or implement messaging
   };
 
   const handleAddToWishlist = (itemId: string) => {
-    console.log('Add to wishlist:', itemId);
     // TODO: Implement wishlist functionality
   };
 
   const handleShare = (item: any) => {
-    console.log('Share item:', item);
     // TODO: Implement sharing functionality
   };
 
   const handleReport = (itemId: string) => {
-    console.log('Report item:', itemId);
     // TODO: Implement reporting functionality
   };
 
@@ -51,6 +50,7 @@ export default function ItemDetailsScreen() {
       onAddToWishlist={handleAddToWishlist}
       onShare={handleShare}
       onReport={handleReport}
+      isInWishlist={isFromWishlist}
     />
   );
 }

@@ -35,6 +35,7 @@ interface ItemDetailsPageProps {
   onAddToWishlist: (itemId: string) => void;
   onShare: (item: ItemDetails) => void;
   onReport: (itemId: string) => void;
+  isInWishlist?: boolean;
 }
 
 const ItemDetailsPage: React.FC<ItemDetailsPageProps> = ({
@@ -43,11 +44,12 @@ const ItemDetailsPage: React.FC<ItemDetailsPageProps> = ({
   onAddToWishlist,
   onShare,
   onReport,
+  isInWishlist = false,
 }) => {
   const router = useRouter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isWishlisted, setIsWishlisted] = useState(isInWishlist);
 
   const handleImageScroll = (event: any) => {
     const slideSize = event.nativeEvent.layoutMeasurement.width;
@@ -229,34 +231,35 @@ const ItemDetailsPage: React.FC<ItemDetailsPageProps> = ({
           <Text style={styles.postedDate}>{formatPostedDate(item.postedDate)}</Text>
         </View>
 
-        {/* Action Buttons */}
-        <View style={styles.actionButtons}>
-          <TouchableOpacity 
-            style={styles.wishlistButton}
-            onPress={handleWishlistToggle}
-          >
-            <Ionicons 
-              name={isWishlisted ? "heart" : "heart-outline"} 
-              size={20} 
-              color={isWishlisted ? "#ff4444" : "#666"} 
-            />
-            <Text style={[
-              styles.wishlistText,
-              isWishlisted && styles.wishlistTextActive
-            ]}>
-              {isWishlisted ? 'Wishlisted' : 'Wishlist'}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={styles.contactButton}
-            onPress={() => onMessageSeller(item.id)}
-          >
-            <Ionicons name="chatbubble-outline" size={20} color="#fff" />
-            <Text style={styles.contactButtonText}>Contact Seller</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
+
+      {/* Fixed Action Buttons */}
+      <View style={styles.fixedActionButtons}>
+        <TouchableOpacity 
+          style={styles.wishlistButton}
+          onPress={handleWishlistToggle}
+        >
+          <Ionicons 
+            name={isWishlisted ? "heart" : "heart-outline"} 
+            size={20} 
+            color={isWishlisted ? "#ff4444" : "#666"} 
+          />
+          <Text style={[
+            styles.wishlistText,
+            isWishlisted && styles.wishlistTextActive
+          ]}>
+            {isWishlisted ? 'Wishlisted' : 'Wishlist'}
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={styles.contactButton}
+          onPress={() => onMessageSeller(item.id)}
+        >
+          <Ionicons name="chatbubble-outline" size={20} color="#fff" />
+          <Text style={styles.contactButtonText}>Contact Seller</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -288,6 +291,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    paddingBottom: 100, // Add padding to prevent content from being hidden behind fixed buttons
   },
   // Photos Section
   photosSection: {
@@ -430,6 +434,7 @@ const styles = StyleSheet.create({
   // Seller Section
   sellerSection: {
     ...globalStyles.paddingSection,
+    marginTop: 20,
   },
   sellerInfo: {
     flexDirection: 'row',
@@ -476,11 +481,20 @@ const styles = StyleSheet.create({
     color: '#999',
     fontStyle: 'italic',
   },
-  // Action Buttons
-  actionButtons: {
+  // Fixed Action Buttons
+  fixedActionButtons: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
     flexDirection: 'row',
     ...globalStyles.paddingActionButtons,
     gap: 12,
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: '#e0e0e0',
+    paddingTop: 12,
+    paddingBottom: 12,
   },
   wishlistButton: {
     flex: 1,
