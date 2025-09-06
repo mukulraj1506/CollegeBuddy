@@ -12,3 +12,6 @@ export default function DashboardScreen() {
 
   return <BuyPage onLogout={handleLogout} />;
 }
+
+
+
