@@ -1,3 +1,4 @@
+import { login } from '@/src/api';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
@@ -42,36 +43,58 @@ const Login: React.FC<LoginProps> = ({
   };
 
   // Handle login
-  const handleLogin = () => {
-    // Reset errors
-    setEmailError('');
-    setPasswordError('');
+  const handleLogin = async () => {
+  // Reset errors
+  setEmailError('');
+  setPasswordError('');
 
-    let hasError = false;
+  let hasError = false;
 
-    // Validate email
-    if (!email.trim()) {
-      setEmailError('Email is required');
-      hasError = true;
-    } else if (!validateEmail(email.trim())) {
-      setEmailError('Please enter a valid email address');
-      hasError = true;
+  // Validate email
+  if (!email.trim()) {
+    setEmailError('Email is required');
+    hasError = true;
+  } else if (!validateEmail(email.trim())) {
+    setEmailError('Please enter a valid email address');
+    hasError = true;
+  }
+
+  // Validate password
+  if (!password.trim()) {
+    setPasswordError('Password is required');
+    hasError = true;
+  } else if (password.length < 6) {
+    setPasswordError('Password must be at least 6 characters');
+    hasError = true;
+  }
+
+  if (hasError) return;
+
+  try {
+    // ✅ Call backend API
+    const response = await login({
+      email: email.trim(),
+      password,
+    });
+
+    console.log("Login success:", response.data);
+
+    // Example: save token locally (if backend returns it)
+    // await AsyncStorage.setItem("token", response.data.token);
+
+    // Navigate to home/dashboard after successful login
+    onLoginSuccess?.();
+
+  } catch (error: any) {
+    console.error("Login failed:", error.response?.data || error.message);
+
+    if (error.response?.status === 401) {
+      setPasswordError("Invalid credentials");
+    } else {
+      setEmailError("Login failed, please try again.");
     }
-
-    // Validate password
-    if (!password.trim()) {
-      setPasswordError('Password is required');
-      hasError = true;
-    } else if (password.length < 6) {
-      setPasswordError('Password must be at least 6 characters');
-      hasError = true;
-    }
-
-    if (!hasError) {
-      onLogin?.(email.trim(), password);
-      onLoginSuccess?.();
-    }
-  };
+  }
+};
 
   // Toggle password visibility
   const togglePasswordVisibility = () => {
@@ -164,7 +187,7 @@ const Login: React.FC<LoginProps> = ({
 
           {/* Sign Up Link */}
           <View style={styles.signUpContainer}>
-            <Text style={styles.signUpText}>Don't have an account? </Text>
+            <Text style={styles.signUpText}>Dont have an account? </Text>
             <TouchableOpacity onPress={onSignUp}>
               <Text style={styles.signUpLink}>Sign up here</Text>
             </TouchableOpacity>
