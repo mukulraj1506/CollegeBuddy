@@ -1,16 +1,16 @@
-import { signup } from "@/src/api";
+// API import removed - using dummy data instead
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
-  Dimensions,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+    Dimensions,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
@@ -115,22 +115,37 @@ const handleSignUp = async () => {
   if (hasError) return;
 
   try {
-    // ✅ Call backend API
-    const response = await signup({
-      name: name.trim(),
-      email: email.trim(),
-      password,
-    });
+    // ✅ Simulate API call with dummy data
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-    console.log("Signup success:", response.data);
+    // Dummy success response
+    const dummyResponse = {
+      data: {
+        message: "Signup successful",
+        user: {
+          id: "2",
+          name: name.trim(),
+          email: email.trim(),
+        },
+        token: "dummy_token_67890"
+      }
+    };
+
+    console.log("Signup success:", dummyResponse.data);
 
     // Optionally, navigate to login or dashboard after signup
     // router.push("/login" as any);
 
   } catch (error: any) {
-    console.error("Signup failed:", error.response?.data || error.message);
-    // You can also show error to user
-    setEmailError("Signup failed, please try again.");
+    console.error("Signup failed:", error.message);
+    
+    // For demo purposes, we'll simulate some error cases
+    if (email.trim() === "error@test.com") {
+      setEmailError("Email already exists, please try a different email.");
+    } else {
+      setEmailError("Signup failed, please try again.");
+    }
   }
 };
 

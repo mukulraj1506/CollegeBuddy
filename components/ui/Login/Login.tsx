@@ -1,16 +1,16 @@
-import { login } from '@/src/api';
+// API import removed - using dummy data instead
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
-  Dimensions,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View
+    Dimensions,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
 } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
@@ -71,24 +71,38 @@ const Login: React.FC<LoginProps> = ({
   if (hasError) return;
 
   try {
-    // ✅ Call backend API
-    const response = await login({
-      email: email.trim(),
-      password,
-    });
+    // ✅ Simulate API call with dummy data
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-    console.log("Login success:", response.data);
+    // Dummy success response
+    const dummyResponse = {
+      data: {
+        message: "Login successful",
+        user: {
+          id: "1",
+          name: "John Doe",
+          email: email.trim(),
+        },
+        token: "dummy_token_12345"
+      }
+    };
+
+    console.log("Login success:", dummyResponse.data);
 
     // Example: save token locally (if backend returns it)
-    // await AsyncStorage.setItem("token", response.data.token);
+    // await AsyncStorage.setItem("token", dummyResponse.data.token);
 
     // Navigate to home/dashboard after successful login
     onLoginSuccess?.();
 
   } catch (error: any) {
-    console.error("Login failed:", error.response?.data || error.message);
+    console.error("Login failed:", error.message);
 
-    if (error.response?.status === 401) {
+    // For demo purposes, we'll simulate some error cases
+    if (email.trim() === "error@test.com") {
+      setEmailError("Invalid credentials");
+    } else if (password === "error") {
       setPasswordError("Invalid credentials");
     } else {
       setEmailError("Login failed, please try again.");
