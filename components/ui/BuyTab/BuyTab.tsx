@@ -1,3 +1,4 @@
+import { useTheme } from '@/contexts/ThemeContext';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import {
@@ -8,6 +9,7 @@ import { ItemList } from '../Common';
 
 const BuyTab: React.FC = () => {
   const router = useRouter();
+  const { colors } = useTheme();
 
   // Sample data for items (with additional properties for filtering)
   const sampleItems = [
@@ -94,7 +96,7 @@ const BuyTab: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ItemList
         items={sampleItems}
         onItemPress={handleItemPress}
@@ -111,7 +113,6 @@ const BuyTab: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
 });
 

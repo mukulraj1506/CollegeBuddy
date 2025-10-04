@@ -1,10 +1,11 @@
+import { useTheme } from '@/contexts/ThemeContext';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import PreviousItems from './PreviousItems';
 import SellNewItem from './SellNewItem';
@@ -15,6 +16,7 @@ interface SellPageProps {
 
 const SellPage: React.FC<SellPageProps> = ({ onLogout }) => {
   const router = useRouter();
+  const { colors } = useTheme();
   const [activeSellTab, setActiveSellTab] = useState<'Previous' | 'New'>('Previous');
 
   // Sample data for previous items
@@ -94,19 +96,20 @@ const SellPage: React.FC<SellPageProps> = ({ onLogout }) => {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Sell Navigation */}
-      <View style={styles.sellNavigation}>
+      <View style={[styles.sellNavigation, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
         <TouchableOpacity
           style={[
             styles.sellNavButton,
-            activeSellTab === 'Previous' && styles.activeSellNavButton
+            activeSellTab === 'Previous' && [styles.activeSellNavButton, { backgroundColor: colors.secondary }]
           ]}
           onPress={() => handleSellTabPress('Previous')}
         >
           <Text style={[
             styles.sellNavText,
-            activeSellTab === 'Previous' && styles.activeSellNavText
+            { color: colors.textSecondary },
+            activeSellTab === 'Previous' && [styles.activeSellNavText, { color: colors.primary }]
           ]}>
             Uploaded Items
           </Text>
@@ -115,13 +118,14 @@ const SellPage: React.FC<SellPageProps> = ({ onLogout }) => {
         <TouchableOpacity
           style={[
             styles.sellNavButton,
-            activeSellTab === 'New' && styles.activeSellNavButton
+            activeSellTab === 'New' && [styles.activeSellNavButton, { backgroundColor: colors.secondary }]
           ]}
           onPress={() => handleSellTabPress('New')}
         >
           <Text style={[
             styles.sellNavText,
-            activeSellTab === 'New' && styles.activeSellNavText
+            { color: colors.textSecondary },
+            activeSellTab === 'New' && [styles.activeSellNavText, { color: colors.primary }]
           ]}>
             Upload New Item
           </Text>
@@ -137,15 +141,12 @@ const SellPage: React.FC<SellPageProps> = ({ onLogout }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   sellNavigation: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
     paddingHorizontal: 10,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
   },
   sellNavButton: {
     flex: 1,
@@ -156,15 +157,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   activeSellNavButton: {
-    backgroundColor: '#f0f8ff',
+    // Background color handled in component
   },
   sellNavText: {
     fontSize: 14,
-    color: '#666',
     fontWeight: '500',
   },
   activeSellNavText: {
-    color: '#06498e',
     fontWeight: '600',
   },
 });

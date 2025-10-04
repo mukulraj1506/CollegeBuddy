@@ -1,3 +1,4 @@
+import { useTheme } from '@/contexts/ThemeContext';
 import React from 'react';
 import {
     StyleSheet,
@@ -6,15 +7,17 @@ import {
 } from 'react-native';
 
 const ChatsTab: React.FC = () => {
+  const { colors } = useTheme();
+  
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Messages</Text>
-      <Text style={styles.subtitle}>Chat with sellers and buyers</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.title, { color: colors.primary }]}>Messages</Text>
+      <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Chat with sellers and buyers</Text>
       
       {/* Placeholder for chat conversations */}
       <View style={styles.placeholderContent}>
-        <Text style={styles.placeholderText}>No conversations yet</Text>
-        <Text style={styles.placeholderSubtext}>
+        <Text style={[styles.placeholderText, { color: colors.textSecondary }]}>No conversations yet</Text>
+        <Text style={[styles.placeholderSubtext, { color: colors.textSecondary }]}>
           Start a conversation by messaging a seller about their item
         </Text>
       </View>
@@ -31,12 +34,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#06498e',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
     marginBottom: 30,
   },
   placeholderContent: {
@@ -46,13 +47,11 @@ const styles = StyleSheet.create({
   },
   placeholderText: {
     fontSize: 18,
-    color: '#666',
     fontWeight: '500',
     marginBottom: 8,
   },
   placeholderSubtext: {
     fontSize: 14,
-    color: '#999',
     textAlign: 'center',
     paddingHorizontal: 40,
   },

@@ -1,3 +1,4 @@
+import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
@@ -19,30 +20,32 @@ interface PreviousItemsCardProps {
 }
 
 const PreviousItemsCard: React.FC<PreviousItemsCardProps> = ({ item, onViewDetails }) => {
+  const { colors } = useTheme();
+  
   return (
-    <View style={styles.itemCard}>
-      <View style={styles.itemImage}>
-        <Ionicons name="image-outline" size={40} color="#ccc" />
+    <View style={[styles.itemCard, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
+      <View style={[styles.itemImage, { backgroundColor: colors.surface }]}>
+        <Ionicons name="image-outline" size={40} color={colors.textSecondary} />
       </View>
       <View style={styles.itemDetails}>
-        <Text style={styles.itemName}>{item.name}</Text>
-        <Text style={styles.itemPrice}>{item.price}</Text>
-        <Text style={styles.itemDate}>{item.date}</Text>
+        <Text style={[styles.itemName, { color: colors.text }]}>{item.name}</Text>
+        <Text style={[styles.itemPrice, { color: colors.primary }]}>{item.price}</Text>
+        <Text style={[styles.itemDate, { color: colors.textSecondary }]}>{item.date}</Text>
         <View style={styles.itemMeta}>
           <Text style={[
             styles.itemStatus,
-            { color: item.status === 'Sold' ? '#4CAF50' : '#FF9800' }
+            { color: item.status === 'Sold' ? colors.success : colors.warning }
           ]}>
             {item.status}
           </Text>
         </View>
       </View>
       <TouchableOpacity 
-        style={styles.viewDetailsButton} 
+        style={[styles.viewDetailsButton, { backgroundColor: colors.buttonBackground }]} 
         onPress={onViewDetails}
         activeOpacity={0.8}
       >
-        <Text style={styles.viewDetailsButtonText}>View Details</Text>
+        <Text style={[styles.viewDetailsButtonText, { color: colors.buttonText }]}>View Details</Text>
       </TouchableOpacity>
     </View>
   );
@@ -51,11 +54,9 @@ const PreviousItemsCard: React.FC<PreviousItemsCardProps> = ({ item, onViewDetai
 const styles = StyleSheet.create({
   itemCard: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
-    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -64,6 +65,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     alignItems: 'center',
+    borderBottomWidth: 1,
   },
   itemImage: {
     width: 60,
@@ -80,18 +82,15 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 4,
   },
   itemPrice: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#06498e',
     marginBottom: 4,
   },
   itemDate: {
     fontSize: 12,
-    color: '#666',
     marginBottom: 8,
   },
   itemMeta: {
@@ -105,7 +104,6 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   viewDetailsButton: {
-    backgroundColor: '#06498e',
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -113,7 +111,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     minWidth: 90,
     marginLeft: 12,
-    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -123,7 +120,6 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   viewDetailsButtonText: {
-    color: '#fff',
     fontSize: 13,
     fontWeight: '600',
   },

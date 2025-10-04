@@ -1,3 +1,4 @@
+import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
@@ -24,6 +25,7 @@ interface EditProfileProps {
 
 const EditProfile: React.FC<EditProfileProps> = ({ onBack }) => {
   const router = useRouter();
+  const { colors } = useTheme();
   
   // Mock user data - in real app, this would come from state/API
   const [userData, setUserData] = useState({
@@ -166,13 +168,13 @@ const EditProfile: React.FC<EditProfileProps> = ({ onBack }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['left', 'right']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['left', 'right']}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
         <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#333" />
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Edit Profile</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>Edit Profile</Text>
         <View style={styles.placeholder} />
       </View>
 
@@ -186,141 +188,165 @@ const EditProfile: React.FC<EditProfileProps> = ({ onBack }) => {
           showsVerticalScrollIndicator={false}
         >
           {/* Profile Picture Section */}
-          <View style={styles.profilePictureSection}>
+          <View style={[styles.profilePictureSection, { backgroundColor: colors.surface }]}>
             <View style={styles.profilePictureContainer}>
-              <View style={styles.profilePicture}>
-                <Ionicons name="person" size={60} color="#06498e" />
+              <View style={[styles.profilePicture, { backgroundColor: colors.secondary, borderColor: colors.card, shadowColor: colors.shadow }]}>
+                <Ionicons name="person" size={60} color={colors.primary} />
               </View>
-              <TouchableOpacity style={styles.editPictureButton}>
-                <Ionicons name="camera" size={20} color="#fff" />
+              <TouchableOpacity style={[styles.editPictureButton, { backgroundColor: colors.primary, borderColor: colors.card }]}>
+                <Ionicons name="camera" size={20} color={colors.buttonText} />
               </TouchableOpacity>
             </View>
-            <Text style={styles.profilePictureText}>Tap to change profile picture</Text>
+            <Text style={[styles.profilePictureText, { color: colors.textSecondary }]}>Tap to change profile picture</Text>
           </View>
 
           {/* Personal Information Section */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Personal Information</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>Personal Information</Text>
 
             {/* Name Field */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>
-                Full Name <Text style={styles.asterisk}>*</Text>
+              <Text style={[styles.label, { color: colors.text }]}>
+                Full Name <Text style={[styles.asterisk, { color: colors.error }]}>*</Text>
               </Text>
               <TextInput
-                style={[styles.input, errors.name ? styles.inputError : null]}
+                style={[
+                  styles.input, 
+                  { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text },
+                  errors.name ? { borderColor: colors.error } : null
+                ]}
                 placeholder="Enter your full name"
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textSecondary}
                 value={userData.name}
                 onChangeText={(value) => handleInputChange('name', value)}
                 autoCapitalize="words"
                 autoCorrect={false}
               />
-              {errors.name ? <Text style={styles.errorText}>{errors.name}</Text> : null}
+              {errors.name ? <Text style={[styles.errorText, { color: colors.error }]}>{errors.name}</Text> : null}
             </View>
 
             {/* Email Field */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>
-                Email Address <Text style={styles.asterisk}>*</Text>
+              <Text style={[styles.label, { color: colors.text }]}>
+                Email Address <Text style={[styles.asterisk, { color: colors.error }]}>*</Text>
               </Text>
               <TextInput
-                style={[styles.input, errors.email ? styles.inputError : null]}
+                style={[
+                  styles.input, 
+                  { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text },
+                  errors.email ? { borderColor: colors.error } : null
+                ]}
                 placeholder="Enter your email address"
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textSecondary}
                 value={userData.email}
                 onChangeText={(value) => handleInputChange('email', value)}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
               />
-              {errors.email ? <Text style={styles.errorText}>{errors.email}</Text> : null}
+              {errors.email ? <Text style={[styles.errorText, { color: colors.error }]}>{errors.email}</Text> : null}
             </View>
 
             {/* Phone Field */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>
-                Phone Number <Text style={styles.asterisk}>*</Text>
+              <Text style={[styles.label, { color: colors.text }]}>
+                Phone Number <Text style={[styles.asterisk, { color: colors.error }]}>*</Text>
               </Text>
               <TextInput
-                style={[styles.input, errors.phone ? styles.inputError : null]}
+                style={[
+                  styles.input, 
+                  { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text },
+                  errors.phone ? { borderColor: colors.error } : null
+                ]}
                 placeholder="Enter your phone number"
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textSecondary}
                 value={userData.phone}
                 onChangeText={(value) => handleInputChange('phone', value)}
                 keyboardType="phone-pad"
                 autoCorrect={false}
               />
-              {errors.phone ? <Text style={styles.errorText}>{errors.phone}</Text> : null}
+              {errors.phone ? <Text style={[styles.errorText, { color: colors.error }]}>{errors.phone}</Text> : null}
             </View>
           </View>
 
           {/* Academic Information Section */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Academic Information</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>Academic Information</Text>
 
             {/* University Field */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>
-                University <Text style={styles.asterisk}>*</Text>
+              <Text style={[styles.label, { color: colors.text }]}>
+                University <Text style={[styles.asterisk, { color: colors.error }]}>*</Text>
               </Text>
               <TextInput
-                style={[styles.input, errors.university ? styles.inputError : null]}
+                style={[
+                  styles.input, 
+                  { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text },
+                  errors.university ? { borderColor: colors.error } : null
+                ]}
                 placeholder="Enter your university name"
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textSecondary}
                 value={userData.university}
                 onChangeText={(value) => handleInputChange('university', value)}
                 autoCapitalize="words"
                 autoCorrect={false}
               />
-              {errors.university ? <Text style={styles.errorText}>{errors.university}</Text> : null}
+              {errors.university ? <Text style={[styles.errorText, { color: colors.error }]}>{errors.university}</Text> : null}
             </View>
 
             {/* Course Field */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>
-                Course <Text style={styles.asterisk}>*</Text>
+              <Text style={[styles.label, { color: colors.text }]}>
+                Course <Text style={[styles.asterisk, { color: colors.error }]}>*</Text>
               </Text>
               <TextInput
-                style={[styles.input, errors.course ? styles.inputError : null]}
+                style={[
+                  styles.input, 
+                  { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text },
+                  errors.course ? { borderColor: colors.error } : null
+                ]}
                 placeholder="Enter your course name"
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textSecondary}
                 value={userData.course}
                 onChangeText={(value) => handleInputChange('course', value)}
                 autoCapitalize="words"
                 autoCorrect={false}
               />
-              {errors.course ? <Text style={styles.errorText}>{errors.course}</Text> : null}
+              {errors.course ? <Text style={[styles.errorText, { color: colors.error }]}>{errors.course}</Text> : null}
             </View>
 
             {/* Year Field */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>
-                Academic Year <Text style={styles.asterisk}>*</Text>
+              <Text style={[styles.label, { color: colors.text }]}>
+                Academic Year <Text style={[styles.asterisk, { color: colors.error }]}>*</Text>
               </Text>
               <TextInput
-                style={[styles.input, errors.year ? styles.inputError : null]}
+                style={[
+                  styles.input, 
+                  { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text },
+                  errors.year ? { borderColor: colors.error } : null
+                ]}
                 placeholder="e.g., 1st Year, 2nd Year, 3rd Year, 4th Year"
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textSecondary}
                 value={userData.year}
                 onChangeText={(value) => handleInputChange('year', value)}
                 autoCapitalize="words"
                 autoCorrect={false}
               />
-              {errors.year ? <Text style={styles.errorText}>{errors.year}</Text> : null}
+              {errors.year ? <Text style={[styles.errorText, { color: colors.error }]}>{errors.year}</Text> : null}
             </View>
           </View>
 
           {/* Bio Section */}
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>About Me</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>About Me</Text>
             
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Bio</Text>
+              <Text style={[styles.label, { color: colors.text }]}>Bio</Text>
               <TextInput
-                style={[styles.textArea]}
+                style={[styles.textArea, { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text }]}
                 placeholder="Tell us about yourself..."
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textSecondary}
                 value={userData.bio}
                 onChangeText={(value) => handleInputChange('bio', value)}
                 multiline
@@ -334,12 +360,16 @@ const EditProfile: React.FC<EditProfileProps> = ({ onBack }) => {
 
           {/* Submit Button */}
           <TouchableOpacity
-            style={[styles.submitButton, isSubmitting && styles.submitButtonDisabled]}
+            style={[
+              styles.submitButton, 
+              { backgroundColor: colors.buttonBackground },
+              isSubmitting && { backgroundColor: colors.textSecondary }
+            ]}
             onPress={handleSubmit}
             disabled={isSubmitting}
             activeOpacity={0.8}
           >
-            <Text style={styles.submitButtonText}>
+            <Text style={[styles.submitButtonText, { color: colors.buttonText }]}>
               {isSubmitting ? 'Updating...' : 'Update Profile'}
             </Text>
           </TouchableOpacity>
@@ -352,16 +382,13 @@ const EditProfile: React.FC<EditProfileProps> = ({ onBack }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     ...globalStyles.paddingHeader,
-    backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
   },
   backButton: {
     padding: 4,
@@ -369,7 +396,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
   },
   placeholder: {
     width: 32,
@@ -387,7 +413,6 @@ const styles = StyleSheet.create({
   profilePictureSection: {
     alignItems: 'center',
     paddingVertical: 30,
-    backgroundColor: '#f8f9fa',
     marginBottom: 20,
   },
   profilePictureContainer: {
@@ -398,12 +423,9 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: '#f0f8ff',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 4,
-    borderColor: '#fff',
-    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -419,15 +441,12 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#06498e',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 3,
-    borderColor: '#fff',
   },
   profilePictureText: {
     fontSize: 14,
-    color: '#666',
     fontStyle: 'italic',
   },
   // Section Styles
@@ -438,7 +457,6 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
     marginBottom: 20,
   },
   // Input Styles
@@ -448,47 +466,37 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 8,
   },
   asterisk: {
-    color: '#ff4444',
     fontWeight: 'bold',
   },
   input: {
-    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#ddd',
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
-    color: '#333',
     height: 48,
   },
   textArea: {
-    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#ddd',
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
-    color: '#333',
     height: 100,
   },
   inputError: {
-    borderColor: '#ff4444',
+    // Error styling handled in component
   },
   errorText: {
-    color: '#ff4444',
     fontSize: 14,
     marginTop: 4,
     marginLeft: 4,
   },
   // Submit Button
   submitButton: {
-    backgroundColor: '#06498e',
     paddingVertical: 16,
     borderRadius: 8,
     alignItems: 'center',
@@ -496,10 +504,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   submitButtonDisabled: {
-    backgroundColor: '#ccc',
+    // Disabled styling handled in component
   },
   submitButtonText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },

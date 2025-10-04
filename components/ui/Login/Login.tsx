@@ -1,16 +1,17 @@
 // API import removed - using dummy data instead
+import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
-    Dimensions,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
@@ -30,6 +31,7 @@ const Login: React.FC<LoginProps> = ({
   onBack,
   onLoginSuccess,
 }) => {
+  const { colors } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -125,15 +127,15 @@ const Login: React.FC<LoginProps> = ({
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       {/* Success Message Overlay */}
       {showSuccessMessage && (
-        <View style={styles.successOverlay}>
-          <View style={styles.successMessage}>
-            <Ionicons name="checkmark-circle" size={32} color="#4CAF50" />
-            <Text style={styles.successText}>Login Successful!</Text>
+        <View style={[styles.successOverlay, { backgroundColor: colors.overlay }]}>
+          <View style={[styles.successMessage, { backgroundColor: colors.card }]}>
+            <Ionicons name="checkmark-circle" size={32} color={colors.success} />
+            <Text style={[styles.successText, { color: colors.success }]}>Login Successful!</Text>
           </View>
         </View>
       )}
@@ -145,21 +147,28 @@ const Login: React.FC<LoginProps> = ({
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={onBack} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#06498e" />
+            <Ionicons name="arrow-back" size={24} color={colors.primary} />
           </TouchableOpacity>
-          <Text style={styles.title}>Welcome Back</Text>
-          <Text style={styles.subtitle}>Sign in to continue</Text>
+          <Text style={[styles.title, { color: colors.primary }]}>Welcome Back</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Sign in to continue</Text>
         </View>
 
         {/* Form */}
         <View style={styles.form}>
           {/* Email/Username Field */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email Address</Text>
+            <Text style={[styles.label, { color: colors.text }]}>Email Address</Text>
             <TextInput
-              style={[styles.input, emailError ? styles.inputError : null]}
+              style={[
+                styles.input, 
+                { 
+                  backgroundColor: colors.inputBackground, 
+                  borderColor: emailError ? colors.error : colors.inputBorder, 
+                  color: colors.text 
+                }
+              ]}
               placeholder="Enter your email address"
-              placeholderTextColor="#999"
+              placeholderTextColor={colors.textSecondary}
               value={email}
               onChangeText={(text) => {
                 setEmail(text);
@@ -168,18 +177,27 @@ const Login: React.FC<LoginProps> = ({
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
+              selectionColor={colors.primary}
             />
-            {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+            {emailError ? <Text style={[styles.errorText, { color: colors.error }]}>{emailError}</Text> : null}
           </View>
 
           {/* Password Field */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Password</Text>
-            <View style={[styles.passwordContainer, passwordError ? styles.inputError : null]}>
+            <Text style={[styles.label, { color: colors.text }]}>Password</Text>
+            <View style={styles.passwordWrapper}>
               <TextInput
-                style={styles.passwordInput}
+                style={[
+                  styles.input, 
+                  { 
+                    backgroundColor: colors.inputBackground, 
+                    borderColor: passwordError ? colors.error : colors.inputBorder, 
+                    color: colors.text,
+                    paddingRight: 50, // Make space for the eye icon
+                  }
+                ]}
                 placeholder="Enter your password"
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textSecondary}
                 value={password}
                 onChangeText={(text) => {
                   setPassword(text);
@@ -191,37 +209,37 @@ const Login: React.FC<LoginProps> = ({
               />
               <TouchableOpacity
                 onPress={togglePasswordVisibility}
-                style={styles.eyeIcon}
+                style={styles.eyeIconAbsolute}
               >
                 <Ionicons
                   name={showPassword ? 'eye-off' : 'eye'}
                   size={24}
-                  color="#999"
+                  color={colors.textSecondary}
                 />
               </TouchableOpacity>
             </View>
-            {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+            {passwordError ? <Text style={[styles.errorText, { color: colors.error }]}>{passwordError}</Text> : null}
           </View>
 
           {/* Forgot Password */}
           <TouchableOpacity onPress={onForgotPassword} style={styles.forgotPassword}>
-            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+            <Text style={[styles.forgotPasswordText, { color: colors.primary }]}>Forgot Password?</Text>
           </TouchableOpacity>
 
           {/* Login Button */}
           <TouchableOpacity
-            style={styles.loginButton}
+            style={[styles.loginButton, { backgroundColor: colors.buttonBackground }]}
             onPress={handleLogin}
             activeOpacity={0.8}
           >
-            <Text style={styles.loginButtonText}>Login</Text>
+            <Text style={[styles.loginButtonText, { color: colors.buttonText }]}>Login</Text>
           </TouchableOpacity>
 
           {/* Sign Up Link */}
           <View style={styles.signUpContainer}>
-            <Text style={styles.signUpText}>Dont have an account? </Text>
+            <Text style={[styles.signUpText, { color: colors.textSecondary }]}>Dont have an account? </Text>
             <TouchableOpacity onPress={onSignUp}>
-              <Text style={styles.signUpLink}>Sign up here</Text>
+              <Text style={[styles.signUpLink, { color: colors.primary }]}>Sign up here</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -233,7 +251,6 @@ const Login: React.FC<LoginProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
   },
   scrollContainer: {
     flexGrow: 1,
@@ -254,12 +271,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#06498e',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
   },
   form: {
     flex: 1,
@@ -270,47 +285,32 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#ddd',
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
-    color: '#333',
     height: 48,
   },
   inputError: {
-    borderColor: '#ff4444',
+    // Error styling handled in component
   },
-  passwordContainer: {
-    flexDirection: 'row',
+  passwordWrapper: {
+    position: 'relative',
+  },
+  eyeIconAbsolute: {
+    position: 'absolute',
+    right: 16,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    height: 48,
-  },
-  passwordInput: {
-    flex: 1,
-    fontSize: 16,
-    color: '#333',
-    height: '100%',
-    paddingVertical: 0,
-  },
-  eyeIcon: {
     padding: 4,
-    marginLeft: 8,
   },
   errorText: {
-    color: '#ff4444',
     fontSize: 14,
     marginTop: 4,
     marginLeft: 4,
@@ -320,19 +320,16 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   forgotPasswordText: {
-    color: '#06498e',
     fontSize: 14,
     fontWeight: '500',
   },
   loginButton: {
-    backgroundColor: '#06498e',
     paddingVertical: 16,
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 30,
   },
   loginButtonText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -342,11 +339,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   signUpText: {
-    color: '#666',
     fontSize: 16,
   },
   signUpLink: {
-    color: '#06498e',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -357,13 +352,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,
   },
   successMessage: {
-    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 24,
     alignItems: 'center',
@@ -381,7 +374,6 @@ const styles = StyleSheet.create({
   successText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#4CAF50',
     marginTop: 12,
     textAlign: 'center',
   },

@@ -1,3 +1,4 @@
+import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
@@ -17,6 +18,7 @@ interface SellNewItemProps {
 }
 
 const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
+  const { colors } = useTheme();
   // Form state
   const [formData, setFormData] = useState({
     title: '',
@@ -96,12 +98,13 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
     >
       {/* Title Section */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          Title <Text style={styles.asterisk}>*</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          Title <Text style={[styles.asterisk, { color: colors.error }]}>*</Text>
         </Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text }]}
           placeholder="e.g., Scientific Calculator or Calculus Textbook"
+          placeholderTextColor={colors.textSecondary}
           value={formData.title}
           onChangeText={(value) => handleInputChange('title', value)}
           maxLength={100}
@@ -110,12 +113,13 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
 
       {/* Description Section */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          Description <Text style={styles.asterisk}>*</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          Description <Text style={[styles.asterisk, { color: colors.error }]}>*</Text>
         </Text>
         <TextInput
-          style={[styles.input, styles.textArea]}
+          style={[styles.input, styles.textArea, { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text }]}
           placeholder="Describe your item in detail..."
+          placeholderTextColor={colors.textSecondary}
           value={formData.description}
           onChangeText={(value) => handleInputChange('description', value)}
           multiline
@@ -126,87 +130,102 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
 
       {/* Photos Upload Section */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Photos</Text>
-        <Text style={styles.sectionSubtitle}>Add up to 10 photos. First photo will be the cover image.</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>Photos</Text>
+        <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>Add up to 10 photos. First photo will be the cover image.</Text>
 
         <View style={styles.photosContainer}>
           {photos.map((photo, index) => (
             <View key={index} style={styles.photoItem}>
               <Image source={{ uri: photo }} style={styles.photoPreview} />
               {index === 0 && (
-                <View style={styles.coverBadge}>
+                <View style={[styles.coverBadge, { backgroundColor: colors.primary }]}>
                   <Text style={styles.coverText}>Cover</Text>
                 </View>
               )}
               <TouchableOpacity
-                style={styles.removePhotoButton}
+                style={[styles.removePhotoButton, { backgroundColor: colors.card }]}
                 onPress={() => handleRemovePhoto(index)}
               >
-                <Ionicons name="close-circle" size={20} color="#ff4444" />
+                <Ionicons name="close-circle" size={20} color={colors.error} />
               </TouchableOpacity>
             </View>
           ))}
 
           {photos.length < 10 && (
-            <TouchableOpacity style={styles.addPhotoButton} onPress={handleAddPhoto}>
-              <Ionicons name="camera" size={24} color="#06498e" />
-              <Text style={styles.addPhotoText}>Add Photo</Text>
+            <TouchableOpacity style={[styles.addPhotoButton, { borderColor: colors.primary, backgroundColor: colors.surface }]} onPress={handleAddPhoto}>
+              <Ionicons name="camera" size={24} color={colors.primary} />
+              <Text style={[styles.addPhotoText, { color: colors.primary }]}>Add Photo</Text>
             </TouchableOpacity>
           )}
         </View>
 
         <View style={styles.photoOptions}>
-          <TouchableOpacity style={styles.photoOption} onPress={() => console.log('Camera')}>
-            <Ionicons name="camera" size={20} color="#06498e" />
-            <Text style={styles.photoOptionText}>Camera</Text>
+          <TouchableOpacity style={[styles.photoOption, { backgroundColor: colors.secondary }]} onPress={() => console.log('Camera')}>
+            <Ionicons name="camera" size={20} color={colors.primary} />
+            <Text style={[styles.photoOptionText, { color: colors.primary }]}>Camera</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.photoOption} onPress={() => console.log('Gallery')}>
-            <Ionicons name="images" size={20} color="#06498e" />
-            <Text style={styles.photoOptionText}>Gallery</Text>
+          <TouchableOpacity style={[styles.photoOption, { backgroundColor: colors.secondary }]} onPress={() => console.log('Gallery')}>
+            <Ionicons name="images" size={20} color={colors.primary} />
+            <Text style={[styles.photoOptionText, { color: colors.primary }]}>Gallery</Text>
           </TouchableOpacity>
         </View>
       </View>
 
       {/* Category Section */}
       <View style={[styles.section, { zIndex: showCategoryDropdown ? 1000 : 1 }]}>
-        <Text style={styles.sectionTitle}>
-          Category <Text style={styles.asterisk}>*</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          Category <Text style={[styles.asterisk, { color: colors.error }]}>*</Text>
         </Text>
         <View style={{ position: 'relative' }}>
           <TouchableOpacity
-            style={globalStyles.dropdown}
+            style={[globalStyles.dropdown, { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder }]}
             onPress={handleCategoryDropdownToggle}
           >
             <Text style={[
               globalStyles.dropdownText,
-              !formData.category && globalStyles.dropdownPlaceholder
+              { color: colors.text },
+              !formData.category && [globalStyles.dropdownPlaceholder, { color: colors.textSecondary }]
             ]}>
               {formData.category || 'Select Category'}
             </Text>
             <Ionicons
               name={showCategoryDropdown ? "chevron-up" : "chevron-down"}
               size={20}
-              color="#666"
+              color={colors.textSecondary}
               style={globalStyles.dropdownIcon}
             />
           </TouchableOpacity>
 
           {showCategoryDropdown && (
-            <View style={[globalStyles.dropdownList, { position: 'absolute', top: 50 }]}>
+            <View style={[globalStyles.dropdownList, { position: 'absolute', top: 50, backgroundColor: colors.inputBackground, borderColor: colors.inputBorder }]}>
               {/* Search Bar */}
-              <View style={globalStyles.searchContainer}>
-                <Ionicons name="search" size={16} color="#666" style={globalStyles.searchIcon} />
+              <View style={styles.searchWrapper}>
                 <TextInput
-                  style={globalStyles.searchInput}
+                  style={[
+                    styles.searchInput, 
+                    { 
+                      backgroundColor: colors.inputBackground, 
+                      borderColor: colors.inputBorder, 
+                      color: colors.text,
+                      paddingLeft: 50, // Make space for search icon on the left
+                      paddingRight: 50, // Make space for close icon on the right
+                    }
+                  ]}
                   placeholder="Search categories..."
-                  placeholderTextColor="#999"
+                  placeholderTextColor={colors.textSecondary}
                   value={categorySearch}
                   onChangeText={setCategorySearch}
                   autoFocus={true}
                 />
+                <TouchableOpacity style={styles.searchIconAbsolute}>
+                  <Ionicons name="search" size={16} color={colors.textSecondary} />
+                </TouchableOpacity>
                 {categorySearch.length > 0 && (
-                  <TouchableOpacity onPress={() => setCategorySearch('')}>
-                    <Ionicons name="close-circle" size={16} color="#666" />
+                  <TouchableOpacity 
+                    style={styles.closeIconAbsolute}
+                    onPress={() => setCategorySearch('')}
+                  >
+                    <Ionicons name="close-circle" size={16} color={colors.textSecondary} />
                   </TouchableOpacity>
                 )}
               </View>
@@ -220,16 +239,16 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
                   filteredCategories.map((category) => (
                     <TouchableOpacity
                       key={category}
-                      style={globalStyles.dropdownItem}
+                      style={[globalStyles.dropdownItem, { borderBottomColor: colors.border }]}
                       onPress={() => {
                         handleInputChange('category', category);
                         setShowCategoryDropdown(false);
                         setCategorySearch('');
                       }}
                     >
-                      <Text style={globalStyles.dropdownItemText}>{category}</Text>
+                      <Text style={[globalStyles.dropdownItemText, { color: colors.text }]}>{category}</Text>
                       {formData.category === category && (
-                        <Ionicons name="checkmark" size={20} color="#06498e" />
+                        <Ionicons name="checkmark" size={20} color={colors.primary} />
                       )}
                     </TouchableOpacity>
                   ))
@@ -246,44 +265,59 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
 
       {/* Condition Section */}
       <View style={[styles.section, { zIndex: showConditionDropdown ? 1000 : 1 }]}>
-        <Text style={styles.sectionTitle}>
-          Condition <Text style={styles.asterisk}>*</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          Condition <Text style={[styles.asterisk, { color: colors.error }]}>*</Text>
         </Text>
         <View style={{ position: 'relative' }}>
           <TouchableOpacity
-            style={globalStyles.dropdown}
+            style={[globalStyles.dropdown, { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder }]}
             onPress={handleConditionDropdownToggle}
           >
             <Text style={[
               globalStyles.dropdownText,
-              !formData.condition && globalStyles.dropdownPlaceholder
+              { color: colors.text },
+              !formData.condition && [globalStyles.dropdownPlaceholder, { color: colors.textSecondary }]
             ]}>
               {formData.condition || 'Select Condition'}
             </Text>
             <Ionicons
               name={showConditionDropdown ? "chevron-up" : "chevron-down"}
               size={20}
-              color="#666"
+              color={colors.textSecondary}
               style={globalStyles.dropdownIcon}
             />
           </TouchableOpacity>
 
           {showConditionDropdown && (
-            <View style={[globalStyles.dropdownList, { position: 'absolute', top: 50 }]}>
+            <View style={[globalStyles.dropdownList, { position: 'absolute', top: 50, backgroundColor: colors.inputBackground, borderColor: colors.inputBorder }]}>
               {/* Search Bar */}
-              <View style={globalStyles.searchContainer}>
-                <Ionicons name="search" size={16} color="#666" style={globalStyles.searchIcon} />
+              <View style={styles.searchWrapper}>
                 <TextInput
-                  style={globalStyles.searchInput}
+                  style={[
+                    styles.searchInput, 
+                    { 
+                      backgroundColor: colors.inputBackground, 
+                      borderColor: colors.inputBorder, 
+                      color: colors.text,
+                      paddingLeft: 50, // Make space for search icon on the left
+                      paddingRight: 50, // Make space for close icon on the right
+                    }
+                  ]}
                   placeholder="Search conditions..."
-                  placeholderTextColor="#999"
+                  placeholderTextColor={colors.textSecondary}
                   value={conditionSearch}
                   onChangeText={setConditionSearch}
                   autoFocus={true}
                 />
+                <TouchableOpacity style={styles.searchIconAbsolute}>
+                  <Ionicons name="search" size={16} color={colors.textSecondary} />
+                </TouchableOpacity>
                 {conditionSearch.length > 0 && (
-                  <TouchableOpacity onPress={() => setConditionSearch('')}>
-                    <Ionicons name="close-circle" size={16} color="#666" />
+                  <TouchableOpacity 
+                    style={styles.closeIconAbsolute}
+                    onPress={() => setConditionSearch('')}
+                  >
+                    <Ionicons name="close-circle" size={16} color={colors.textSecondary} />
                   </TouchableOpacity>
                 )}
               </View>
@@ -297,16 +331,16 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
                   filteredConditions.map((condition) => (
                     <TouchableOpacity
                       key={condition}
-                      style={globalStyles.dropdownItem}
+                      style={[globalStyles.dropdownItem, { borderBottomColor: colors.border }]}
                       onPress={() => {
                         handleInputChange('condition', condition);
                         setShowConditionDropdown(false);
                         setConditionSearch('');
                       }}
                     >
-                      <Text style={globalStyles.dropdownItemText}>{condition}</Text>
+                      <Text style={[globalStyles.dropdownItemText, { color: colors.text }]}>{condition}</Text>
                       {formData.condition === condition && (
-                        <Ionicons name="checkmark" size={20} color="#06498e" />
+                        <Ionicons name="checkmark" size={20} color={colors.primary} />
                       )}
                     </TouchableOpacity>
                   ))
@@ -323,14 +357,15 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
 
       {/* Price Section */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>
-          Price <Text style={styles.asterisk}>*</Text>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          Price <Text style={[styles.asterisk, { color: colors.error }]}>*</Text>
         </Text>
-        <View style={styles.priceContainer}>
-          <Text style={styles.currencySymbol}>₹</Text>
+        <View style={[styles.priceContainer, { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder }]}>
+          <Text style={[styles.currencySymbol, { color: colors.textSecondary, borderRightColor: colors.border }]}>₹</Text>
           <TextInput
-            style={[styles.input, styles.priceInput]}
+            style={[styles.input, styles.priceInput, { color: colors.text }]}
             placeholder="0.00"
+            placeholderTextColor={colors.textSecondary}
             value={formData.price}
             onChangeText={(value) => {
               // Only allow numbers and decimal point
@@ -350,19 +385,20 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
         >
           <View style={[
             globalStyles.checkbox,
-            formData.negotiable && globalStyles.checkboxChecked
+            { borderColor: colors.border, backgroundColor: colors.inputBackground },
+            formData.negotiable && [globalStyles.checkboxChecked, { backgroundColor: colors.primary, borderColor: colors.primary }]
           ]}>
             {formData.negotiable && (
-              <Ionicons name="checkmark" size={16} style={globalStyles.checkboxIcon} />
+              <Ionicons name="checkmark" size={16} style={[globalStyles.checkboxIcon, { color: colors.buttonText }]} />
             )}
           </View>
-          <Text style={globalStyles.checkboxLabel}>Price is negotiable</Text>
+          <Text style={[globalStyles.checkboxLabel, { color: colors.text }]}>Price is negotiable</Text>
         </TouchableOpacity>
       </View>
 
       {/* Submit Button */}
-      <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-        <Text style={styles.submitButtonText}>Upload Item</Text>
+      <TouchableOpacity style={[styles.submitButton, { backgroundColor: colors.buttonBackground }]} onPress={handleSubmit}>
+        <Text style={[styles.submitButtonText, { color: colors.buttonText }]}>Upload Item</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -383,27 +419,22 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 8,
   },
   asterisk: {
-    color: '#ff4444',
     fontWeight: 'bold',
   },
   sectionSubtitle: {
     fontSize: 14,
-    color: '#666',
     marginBottom: 12,
   },
   // Input styles
   input: {
     borderWidth: 1,
-    borderColor: '#e0e0e0',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,
     fontSize: 16,
-    backgroundColor: '#fff',
   },
   textArea: {
     height: 100,
@@ -430,7 +461,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 4,
     left: 4,
-    backgroundColor: '#06498e',
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -444,23 +474,19 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -6,
     right: -6,
-    backgroundColor: '#fff',
     borderRadius: 10,
   },
   addPhotoButton: {
     width: 80,
     height: 80,
     borderWidth: 2,
-    borderColor: '#06498e',
     borderStyle: 'dashed',
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f8f9ff',
   },
   addPhotoText: {
     fontSize: 12,
-    color: '#06498e',
     marginTop: 4,
     fontWeight: '500',
   },
@@ -474,13 +500,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 8,
     paddingHorizontal: 12,
-    backgroundColor: '#f0f8ff',
     borderRadius: 6,
   },
   photoOptionText: {
     marginLeft: 6,
     fontSize: 14,
-    color: '#06498e',
     fontWeight: '500',
   },
   // Price styles
@@ -488,18 +512,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#e0e0e0',
     borderRadius: 8,
-    backgroundColor: '#fff',
     marginBottom: 12,
   },
   currencySymbol: {
     fontSize: 16,
-    color: '#666',
     paddingHorizontal: 12,
     paddingVertical: 12,
     borderRightWidth: 1,
-    borderRightColor: '#e0e0e0',
   },
   priceInput: {
     flex: 1,
@@ -508,16 +528,42 @@ const styles = StyleSheet.create({
   },
   // Submit button styles
   submitButton: {
-    backgroundColor: '#06498e',
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 10,
   },
   submitButtonText: {
-    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+  },
+  // Search wrapper styles
+  searchWrapper: {
+    position: 'relative',
+    marginBottom: 8,
+  },
+  searchInput: {
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    fontSize: 16,
+    height: 48,
+  },
+  searchIconAbsolute: {
+    position: 'absolute',
+    left: 16, // Position on the left side
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 4,
+  },
+  closeIconAbsolute: {
+    position: 'absolute',
+    right: 12, // Exact same position as the caret icon
+    top: '50%',
+    transform: [{ translateY: -10 }], // Exact same transform as the caret icon
   },
 });
 

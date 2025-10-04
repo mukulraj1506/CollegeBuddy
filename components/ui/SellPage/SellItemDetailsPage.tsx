@@ -1,3 +1,4 @@
+import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
@@ -11,6 +12,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../../../styles/globalStyles';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -41,6 +43,7 @@ const SellItemDetailsPage: React.FC<SellItemDetailsPageProps> = ({
   onShare,
 }) => {
   const router = useRouter();
+  const { colors } = useTheme();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
@@ -132,15 +135,15 @@ const SellItemDetailsPage: React.FC<SellItemDetailsPageProps> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top', 'left', 'right']}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
         <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#333" />
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>My Item Details</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>My Item Details</Text>
         <TouchableOpacity onPress={handleShare} style={styles.shareButton}>
-          <Ionicons name="share-outline" size={20} color="#06498e" />
+          <Ionicons name="share-outline" size={20} color={colors.primary} />
         </TouchableOpacity>
       </View>
 
@@ -184,24 +187,24 @@ const SellItemDetailsPage: React.FC<SellItemDetailsPageProps> = ({
               )}
             </>
           ) : (
-            <View style={styles.noImageContainer}>
-              <Ionicons name="image-outline" size={48} color="#ccc" />
-              <Text style={styles.noImageText}>No images available</Text>
+            <View style={[styles.noImageContainer, { backgroundColor: colors.surface }]}>
+              <Ionicons name="image-outline" size={48} color={colors.textSecondary} />
+              <Text style={[styles.noImageText, { color: colors.textSecondary }]}>No images available</Text>
             </View>
           )}
         </View>
 
         {/* Title + Price Section */}
         <View style={styles.titlePriceSection}>
-          <Text style={styles.itemTitle}>{item?.name || 'Untitled Item'}</Text>
+          <Text style={[styles.itemTitle, { color: colors.text }]}>{item?.name || 'Untitled Item'}</Text>
           <View style={styles.priceContainer}>
-            <Text style={styles.price}>{item?.price || 'Price not set'}</Text>
+            <Text style={[styles.price, { color: colors.primary }]}>{item?.price || 'Price not set'}</Text>
             {item?.status && (
               <View style={[
                 styles.statusBadge,
-                { backgroundColor: item.status === 'Sold' ? '#4CAF50' : '#FF9800' }
+                { backgroundColor: item.status === 'Sold' ? colors.success : colors.warning }
               ]}>
-                <Text style={styles.statusText}>{item.status}</Text>
+                <Text style={[styles.statusText, { color: colors.buttonText }]}>{item.status}</Text>
               </View>
             )}
           </View>
@@ -210,20 +213,20 @@ const SellItemDetailsPage: React.FC<SellItemDetailsPageProps> = ({
         {/* Condition & Category Section */}
         <View style={styles.detailsSection}>
           <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Condition:</Text>
-            <Text style={styles.detailValue}>{item?.condition || 'Not specified'}</Text>
+            <Text style={[styles.detailLabel, { color: colors.textSecondary }]}>Condition:</Text>
+            <Text style={[styles.detailValue, { color: colors.text }]}>{item?.condition || 'Not specified'}</Text>
           </View>
           <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Category:</Text>
-            <Text style={styles.detailValue}>{item?.category || 'Not specified'}</Text>
+            <Text style={[styles.detailLabel, { color: colors.textSecondary }]}>Category:</Text>
+            <Text style={[styles.detailValue, { color: colors.text }]}>{item?.category || 'Not specified'}</Text>
           </View>
         </View>
 
         {/* Description Section */}
         <View style={styles.descriptionSection}>
-          <Text style={styles.sectionTitle}>Description</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Description</Text>
           <Text 
-            style={styles.description}
+            style={[styles.description, { color: colors.text }]}
             numberOfLines={isDescriptionExpanded ? undefined : 3}
           >
             {item?.description || 'No description provided'}
@@ -233,13 +236,13 @@ const SellItemDetailsPage: React.FC<SellItemDetailsPageProps> = ({
               onPress={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
               style={styles.expandButton}
             >
-              <Text style={styles.expandButtonText}>
+              <Text style={[styles.expandButtonText, { color: colors.primary }]}>
                 {isDescriptionExpanded ? 'Show Less' : 'Show More'}
               </Text>
               <Ionicons 
                 name={isDescriptionExpanded ? "chevron-up" : "chevron-down"} 
                 size={16} 
-                color="#06498e" 
+                color={colors.primary} 
               />
             </TouchableOpacity>
           )}
@@ -247,29 +250,29 @@ const SellItemDetailsPage: React.FC<SellItemDetailsPageProps> = ({
 
         {/* Additional Details */}
         <View style={styles.additionalDetails}>
-          <Text style={styles.postedDate}>{formatPostedDate(item?.postedDate)}</Text>
+          <Text style={[styles.postedDate, { color: colors.textSecondary }]}>{formatPostedDate(item?.postedDate)}</Text>
         </View>
       </ScrollView>
 
       {/* Fixed Action Buttons */}
-      <View style={styles.fixedActionButtons}>
+      <View style={[styles.fixedActionButtons, { backgroundColor: colors.card, borderTopColor: colors.border }]}>
         <TouchableOpacity 
-          style={styles.editButton}
+          style={[styles.editButton, { borderColor: colors.primary, backgroundColor: colors.card }]}
           onPress={handleEdit}
         >
-          <Ionicons name="create-outline" size={20} color="#06498e" />
-          <Text style={styles.editButtonText}>Edit</Text>
+          <Ionicons name="create-outline" size={20} color={colors.primary} />
+          <Text style={[styles.editButtonText, { color: colors.primary }]}>Edit</Text>
         </TouchableOpacity>
 
         <TouchableOpacity 
-          style={styles.deleteButton}
+          style={[styles.deleteButton, { backgroundColor: colors.error }]}
           onPress={handleDelete}
         >
-          <Ionicons name="trash-outline" size={20} color="#fff" />
-          <Text style={styles.deleteButtonText}>Delete</Text>
+          <Ionicons name="trash-outline" size={20} color={colors.buttonText} />
+          <Text style={[styles.deleteButtonText, { color: colors.buttonText }]}>Delete</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -470,12 +473,9 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#06498e',
-    backgroundColor: '#fff',
   },
   editButtonText: {
     fontSize: 16,
-    color: '#06498e',
     marginLeft: 6,
     fontWeight: '600',
   },
@@ -486,11 +486,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 14,
     borderRadius: 8,
-    backgroundColor: '#ff4444',
   },
   deleteButtonText: {
     fontSize: 16,
-    color: '#fff',
     marginLeft: 6,
     fontWeight: '600',
   },

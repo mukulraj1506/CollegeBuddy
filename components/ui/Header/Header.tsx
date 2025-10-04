@@ -1,3 +1,4 @@
+import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
@@ -13,6 +14,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../../../styles/globalStyles';
+import { ThemeToggle } from '../ThemeToggle';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -42,6 +44,7 @@ const Header: React.FC<HeaderProps> = ({
   showSearchIcon = true,
 }) => {
   const router = useRouter();
+  const { colors } = useTheme();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const sidebarWidth = screenWidth; // Take full screen width
   const [slideAnim] = useState(new Animated.Value(sidebarWidth));
@@ -89,7 +92,7 @@ const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: colors.background, borderBottomColor: colors.border }]}>
         {/* Left side - Homepage Image and Page Name */}
         <View style={styles.leftSection}>
           <TouchableOpacity onPress={onHomePress} style={styles.homeButton}>
@@ -99,7 +102,7 @@ const Header: React.FC<HeaderProps> = ({
               resizeMode="contain"
             />
           </TouchableOpacity>
-          <Text style={styles.pageTitle}>{pageName}</Text>
+          <Text style={[styles.pageTitle, { color: colors.primary }]}>{pageName}</Text>
         </View>
 
         {/* Right side icons */}
@@ -107,19 +110,19 @@ const Header: React.FC<HeaderProps> = ({
           {/* Search Icon - conditionally rendered */}
           {showSearchIcon && (
             <TouchableOpacity onPress={onSearchPress} style={styles.iconButton}>
-              <Ionicons name="search" size={24} color="#06498e" />
+              <Ionicons name="search" size={24} color={colors.primary} />
             </TouchableOpacity>
           )}
 
           {/* Notifications Bell with Red Dot */}
           <TouchableOpacity onPress={onNotificationPress} style={styles.notificationContainer}>
-            <Ionicons name="notifications" size={24} color="#06498e" />
-            {hasNotifications && <View style={styles.redDot} />}
+            <Ionicons name="notifications" size={24} color={colors.primary} />
+            {hasNotifications && <View style={[styles.redDot, { backgroundColor: colors.error }]} />}
           </TouchableOpacity>
 
           {/* Profile Image */}
           <TouchableOpacity onPress={handleProfilePress} style={styles.profileButton}>
-            <Ionicons name="person-circle" size={32} color="#06498e" />
+            <Ionicons name="person-circle" size={32} color={colors.primary} />
           </TouchableOpacity>
         </View>
       </View>
@@ -129,7 +132,7 @@ const Header: React.FC<HeaderProps> = ({
         <>
           {/* Overlay */}
           <TouchableOpacity 
-            style={styles.overlay}
+            style={[styles.overlay, { backgroundColor: colors.overlay }]}
             activeOpacity={1}
             onPress={closeSidebar}
           />
@@ -138,6 +141,7 @@ const Header: React.FC<HeaderProps> = ({
           <Animated.View 
             style={[
               styles.sidebar,
+              { backgroundColor: colors.background },
               {
                 transform: [{ translateX: slideAnim }]
               }
@@ -145,59 +149,66 @@ const Header: React.FC<HeaderProps> = ({
           >
             <SafeAreaView style={styles.sidebarSafeArea} edges={['top', 'left', 'right']}>
               {/* Back Button Header */}
-              <View style={styles.sidebarHeader}>
+              <View style={[styles.sidebarHeader, { borderBottomColor: colors.border }]}>
                 <TouchableOpacity onPress={closeSidebar} style={styles.backButton}>
-                  <Ionicons name="arrow-back" size={24} color="#333" />
+                  <Ionicons name="arrow-back" size={24} color={colors.text} />
                 </TouchableOpacity>
               </View>
 
               {/* Scrollable Content */}
               <ScrollView style={styles.sidebarContent} showsVerticalScrollIndicator={false}>
               {/* User Profile Section */}
-              <View style={styles.userProfileSection}>
+              <View style={[styles.userProfileSection, { borderBottomColor: colors.border }]}>
                 <View style={styles.userAvatar}>
-                  <Ionicons name="person-circle" size={80} color="#06498e" />
+                  <Ionicons name="person-circle" size={80} color={colors.primary} />
                 </View>
-                <Text style={styles.userName}>John Doe</Text>
-                <Text style={styles.userEmail}>john.doe@example.com</Text>
+                <Text style={[styles.userName, { color: colors.text }]}>John Doe</Text>
+                <Text style={[styles.userEmail, { color: colors.textSecondary }]}>john.doe@example.com</Text>
               </View>
 
               {/* Menu Items */}
               <View style={styles.menuContainer}>
                 <TouchableOpacity 
-                  style={styles.menuItem}
+                  style={[styles.menuItem, { backgroundColor: colors.background, borderBottomColor: colors.border }]}
                   onPress={() => handleMenuOption('edit')}
                   activeOpacity={0.7}
                 >
-                  <Ionicons name="create-outline" size={24} color="#06498e" />
-                  <Text style={styles.menuItemText}>Edit Profile</Text>
-                  <Ionicons name="chevron-forward" size={20} color="#ccc" />
+                  <Ionicons name="create-outline" size={24} color={colors.primary} />
+                  <Text style={[styles.menuItemText, { color: colors.text }]}>Edit Profile</Text>
+                  <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
                 </TouchableOpacity>
                 
                 <TouchableOpacity 
-                  style={styles.menuItem}
+                  style={[styles.menuItem, { backgroundColor: colors.background, borderBottomColor: colors.border }]}
                   onPress={() => handleMenuOption('contact')}
                   activeOpacity={0.7}
                 >
-                  <Ionicons name="mail-outline" size={24} color="#06498e" />
-                  <Text style={styles.menuItemText}>Contact Us</Text>
-                  <Ionicons name="chevron-forward" size={20} color="#ccc" />
+                  <Ionicons name="mail-outline" size={24} color={colors.primary} />
+                  <Text style={[styles.menuItemText, { color: colors.text }]}>Contact Us</Text>
+                  <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
                 </TouchableOpacity>
+
+                {/* Theme Toggle */}
+                <View style={[styles.menuItem, { backgroundColor: colors.background, borderBottomColor: colors.border }]}>
+                  <Ionicons name="color-palette-outline" size={24} color={colors.primary} />
+                  <Text style={[styles.menuItemText, { color: colors.text }]}>Theme</Text>
+                  <ThemeToggle style={styles.sidebarThemeToggle} />
+                </View>
               </View>
             </ScrollView>
 
             {/* Fixed Footer */}
-            <View style={styles.sidebarFooter}>
-              <Text style={styles.madeWithLove}>Made with ❤️ in India</Text>
+            <View style={[styles.sidebarFooter, { backgroundColor: colors.background, borderTopColor: colors.border }]}>
+              <Text style={[styles.madeWithLove, { color: colors.textSecondary }]}>Made with ❤️ in India</Text>
               
-              <View style={styles.footerDivider} />
+              <View style={[styles.footerDivider, { backgroundColor: colors.border }]} />
               
               <TouchableOpacity 
-                style={styles.logoutButton}
+                style={[styles.logoutButton, { backgroundColor: colors.surface, borderColor: colors.error }]}
                 onPress={() => handleMenuOption('logout')}
               >
-                <Ionicons name="log-out-outline" size={24} color="#ff4444" />
-                <Text style={styles.logoutText}>Logout</Text>
+                <Ionicons name="log-out-outline" size={24} color={colors.error} />
+                <Text style={[styles.logoutText, { color: colors.error }]}>Logout</Text>
               </TouchableOpacity>
             </View>
             </SafeAreaView>
@@ -258,6 +269,9 @@ const styles = StyleSheet.create({
   },
   profileButton: {
     padding: 8,
+  },
+  sidebarThemeToggle: {
+    marginLeft: 'auto',
   },
   // Sidebar Styles
   overlay: {

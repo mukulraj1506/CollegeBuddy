@@ -6,12 +6,14 @@ import ChatsTab from '../ChatsTab/ChatsTab';
 import Header from '../Header/Header';
 import SellPage from '../SellPage/SellPage';
 import WishlistTab from '../WishlistTab/WishlistTab';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface MainNavigationProps {
   onLogout?: () => void;
 }
 
 const MainNavigation: React.FC<MainNavigationProps> = ({ onLogout }) => {
+  const { colors } = useTheme();
   const [activeTab, setActiveTab] = useState<'Buy' | 'Sell' | 'Wishlist' | 'Chats'>('Buy');
 
   const handleHomePress = () => {
@@ -76,7 +78,7 @@ const MainNavigation: React.FC<MainNavigationProps> = ({ onLogout }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* Header */}
       <Header
         pageName={getPageName()}
@@ -106,7 +108,6 @@ const MainNavigation: React.FC<MainNavigationProps> = ({ onLogout }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
 });
 

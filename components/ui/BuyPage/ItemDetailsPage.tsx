@@ -1,3 +1,4 @@
+import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
@@ -48,6 +49,7 @@ const ItemDetailsPage: React.FC<ItemDetailsPageProps> = ({
   isInWishlist = false,
 }) => {
   const router = useRouter();
+  const { colors } = useTheme();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(isInWishlist);
@@ -98,15 +100,15 @@ const ItemDetailsPage: React.FC<ItemDetailsPageProps> = ({
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top', 'left', 'right']}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
         <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#333" />
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Item Details</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>Item Details</Text>
         <TouchableOpacity onPress={handleReport} style={styles.reportButton}>
-          <Ionicons name="flag-outline" size={20} color="#ff4444" />
+          <Ionicons name="flag-outline" size={20} color={colors.error} />
         </TouchableOpacity>
       </View>
 
@@ -150,21 +152,21 @@ const ItemDetailsPage: React.FC<ItemDetailsPageProps> = ({
               )}
             </>
           ) : (
-            <View style={styles.noImageContainer}>
-              <Ionicons name="image-outline" size={48} color="#ccc" />
-              <Text style={styles.noImageText}>No images available</Text>
+            <View style={[styles.noImageContainer, { backgroundColor: colors.surface }]}>
+              <Ionicons name="image-outline" size={48} color={colors.textSecondary} />
+              <Text style={[styles.noImageText, { color: colors.textSecondary }]}>No images available</Text>
             </View>
           )}
         </View>
 
         {/* Title + Price Section */}
         <View style={styles.titlePriceSection}>
-          <Text style={styles.itemTitle}>{item.name}</Text>
+          <Text style={[styles.itemTitle, { color: colors.text }]}>{item.name}</Text>
           <View style={styles.priceContainer}>
-            <Text style={styles.price}>{item.price}</Text>
+            <Text style={[styles.price, { color: colors.primary }]}>{item.price}</Text>
             {item.negotiable === true && (
-              <View style={styles.negotiableBadge}>
-                <Text style={styles.negotiableText}>Negotiable</Text>
+              <View style={[styles.negotiableBadge, { backgroundColor: colors.info }]}>
+                <Text style={[styles.negotiableText, { color: colors.buttonText }]}>Negotiable</Text>
               </View>
             )}
           </View>
@@ -173,20 +175,20 @@ const ItemDetailsPage: React.FC<ItemDetailsPageProps> = ({
         {/* Condition & Category Section */}
         <View style={styles.detailsSection}>
           <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Condition:</Text>
-            <Text style={styles.detailValue}>{item.condition}</Text>
+            <Text style={[styles.detailLabel, { color: colors.textSecondary }]}>Condition:</Text>
+            <Text style={[styles.detailValue, { color: colors.text }]}>{item.condition}</Text>
           </View>
           <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Category:</Text>
-            <Text style={styles.detailValue}>{item.category || 'Not specified'}</Text>
+            <Text style={[styles.detailLabel, { color: colors.textSecondary }]}>Category:</Text>
+            <Text style={[styles.detailValue, { color: colors.text }]}>{item.category || 'Not specified'}</Text>
           </View>
         </View>
 
         {/* Description Section */}
         <View style={styles.descriptionSection}>
-          <Text style={styles.sectionTitle}>Description</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Description</Text>
           <Text 
-            style={styles.description}
+            style={[styles.description, { color: colors.text }]}
             numberOfLines={isDescriptionExpanded ? undefined : 3}
           >
             {item.description || 'No description provided'}
@@ -196,13 +198,13 @@ const ItemDetailsPage: React.FC<ItemDetailsPageProps> = ({
               onPress={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
               style={styles.expandButton}
             >
-              <Text style={styles.expandButtonText}>
+              <Text style={[styles.expandButtonText, { color: colors.primary }]}>
                 {isDescriptionExpanded ? 'Show Less' : 'Show More'}
               </Text>
               <Ionicons 
                 name={isDescriptionExpanded ? "chevron-up" : "chevron-down"} 
                 size={16} 
-                color="#06498e" 
+                color={colors.primary} 
               />
             </TouchableOpacity>
           )}
@@ -210,18 +212,18 @@ const ItemDetailsPage: React.FC<ItemDetailsPageProps> = ({
 
         {/* Seller Info Section */}
         <View style={styles.sellerSection}>
-          <Text style={styles.sectionTitle}>Seller Information</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Seller Information</Text>
           <View style={styles.sellerInfo}>
-            <View style={styles.sellerAvatar}>
-              <Text style={styles.sellerInitials}>
+            <View style={[styles.sellerAvatar, { backgroundColor: colors.primary }]}>
+              <Text style={[styles.sellerInitials, { color: colors.buttonText }]}>
                 {item.seller.split(' ').map(n => n[0]).join('').toUpperCase()}
               </Text>
             </View>
             <View style={styles.sellerDetails}>
-              <Text style={styles.sellerName}>{item.seller}</Text>
+              <Text style={[styles.sellerName, { color: colors.text }]}>{item.seller}</Text>
               <View style={styles.sellerLocation}>
-                <Ionicons name="location-outline" size={14} color="#666" />
-                <Text style={styles.locationText}>{item.location}</Text>
+                <Ionicons name="location-outline" size={14} color={colors.textSecondary} />
+                <Text style={[styles.locationText, { color: colors.textSecondary }]}>{item.location}</Text>
               </View>
             </View>
           </View>
@@ -229,36 +231,36 @@ const ItemDetailsPage: React.FC<ItemDetailsPageProps> = ({
 
         {/* Additional Details */}
         <View style={styles.additionalDetails}>
-          <Text style={styles.postedDate}>{formatPostedDate(item.postedDate)}</Text>
+          <Text style={[styles.postedDate, { color: colors.textSecondary }]}>{formatPostedDate(item.postedDate)}</Text>
         </View>
 
       </ScrollView>
 
       {/* Fixed Action Buttons */}
-      <View style={styles.fixedActionButtons}>
+      <View style={[styles.fixedActionButtons, { backgroundColor: colors.card, borderTopColor: colors.border }]}>
         <TouchableOpacity 
-          style={styles.wishlistButton}
+          style={[styles.wishlistButton, { borderColor: colors.border, backgroundColor: colors.card }]}
           onPress={handleWishlistToggle}
         >
           <Ionicons 
             name={isWishlisted ? "heart" : "heart-outline"} 
             size={20} 
-            color={isWishlisted ? "#ff4444" : "#666"} 
+            color={isWishlisted ? colors.error : colors.textSecondary} 
           />
           <Text style={[
             styles.wishlistText,
-            isWishlisted && styles.wishlistTextActive
+            { color: isWishlisted ? colors.error : colors.textSecondary }
           ]}>
             {isWishlisted ? 'Wishlisted' : 'Wishlist'}
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity 
-          style={styles.contactButton}
+          style={[styles.contactButton, { backgroundColor: colors.primary }]}
           onPress={() => onMessageSeller(item.id)}
         >
-          <Ionicons name="chatbubble-outline" size={20} color="#fff" />
-          <Text style={styles.contactButtonText}>Contact Seller</Text>
+          <Ionicons name="chatbubble-outline" size={20} color={colors.buttonText} />
+          <Text style={[styles.contactButtonText, { color: colors.buttonText }]}>Contact Seller</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -510,17 +512,11 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#e0e0e0',
-    backgroundColor: '#fff',
   },
   wishlistText: {
     fontSize: 16,
-    color: '#666',
     marginLeft: 6,
     fontWeight: '600',
-  },
-  wishlistTextActive: {
-    color: '#ff4444',
   },
   contactButton: {
     flex: 2,
@@ -529,11 +525,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 14,
     borderRadius: 8,
-    backgroundColor: '#06498e',
   },
   contactButtonText: {
     fontSize: 16,
-    color: '#fff',
     marginLeft: 6,
     fontWeight: '600',
   },

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface SearchBarProps {
   searchQuery: string;
@@ -23,28 +24,29 @@ const SearchBar: React.FC<SearchBarProps> = ({
   onFilterPress,
   placeholder = 'Search items...',
 }) => {
+  const { colors } = useTheme();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
       {/* Search Input */}
-      <View style={styles.searchContainer}>
+      <View style={[styles.searchContainer, { backgroundColor: colors.surface }]}>
         <TextInput
-          style={styles.searchInput}
+          style={[styles.searchInput, { color: colors.text }]}
           placeholder={placeholder}
-          placeholderTextColor="#999"
+          placeholderTextColor={colors.textSecondary}
           value={searchQuery}
           onChangeText={onSearchChange}
           returnKeyType="search"
           onSubmitEditing={onSearchPress}
         />
         <TouchableOpacity onPress={onSearchPress} style={styles.searchIconButton}>
-          <Ionicons name="search" size={20} color="#06498e" />
+          <Ionicons name="search" size={20} color={colors.primary} />
         </TouchableOpacity>
       </View>
 
       {/* Filter Button */}
-      <TouchableOpacity style={styles.filterButton} onPress={onFilterPress}>
-        <Ionicons name="filter" size={20} color="#06498e" />
-        <Text style={styles.filterLabel}>Filter</Text>
+      <TouchableOpacity style={[styles.filterButton, { backgroundColor: colors.surface }]} onPress={onFilterPress}>
+        <Ionicons name="filter" size={20} color={colors.primary} />
+        <Text style={[styles.filterLabel, { color: colors.primary }]}>Filter</Text>
       </TouchableOpacity>
     </View>
   );
@@ -56,15 +58,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 10,
     paddingVertical: 10,
-    backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
   },
   searchContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 12,
@@ -77,7 +76,6 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#333',
   },
   filterButton: {
     flexDirection: 'row',
@@ -85,13 +83,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: '#f5f5f5',
     minHeight: 44,
   },
   filterLabel: {
     marginLeft: 6,
     fontSize: 14,
-    color: '#06498e',
     fontWeight: '500',
   },
 });

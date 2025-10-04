@@ -1,16 +1,17 @@
 // API import removed - using dummy data instead
+import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
-    Dimensions,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
@@ -26,6 +27,7 @@ const SignUp: React.FC<SignUpProps> = ({
   onLogin,
   onBack,
 }) => {
+  const { colors } = useTheme();
   const [name, setname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -168,15 +170,15 @@ const handleSignUp = async () => {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       {/* Success Message Overlay */}
       {showSuccessMessage && (
-        <View style={styles.successOverlay}>
-          <View style={styles.successMessage}>
-            <Ionicons name="checkmark-circle" size={32} color="#4CAF50" />
-            <Text style={styles.successText}>Signup Successful!</Text>
+        <View style={[styles.successOverlay, { backgroundColor: colors.overlay }]}>
+          <View style={[styles.successMessage, { backgroundColor: colors.card }]}>
+            <Ionicons name="checkmark-circle" size={32} color={colors.success} />
+            <Text style={[styles.successText, { color: colors.success }]}>Signup Successful!</Text>
           </View>
         </View>
       )}
@@ -188,41 +190,50 @@ const handleSignUp = async () => {
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={onBack} style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#06498e" />
+            <Ionicons name="arrow-back" size={24} color={colors.primary} />
           </TouchableOpacity>
-          <Text style={styles.title}>Create Account</Text>
-          <Text style={styles.subtitle}>Sign up to get started</Text>
+          <Text style={[styles.title, { color: colors.primary }]}>Create Account</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Sign up to get started</Text>
         </View>
 
         {/* Form */}
         <View style={styles.form}>
           {/* name Field */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>
-              name <Text style={styles.asterisk}>*</Text>
-            </Text>
+            <Text style={[styles.label, { color: colors.text }]}>Name</Text>
             <TextInput
-              style={[styles.input, nameError ? styles.inputError : null]}
+              style={[
+                styles.input, 
+                { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text },
+                nameError ? { borderColor: colors.error } : null
+              ]}
               placeholder="Enter your name"
-              placeholderTextColor="#999"
+              placeholderTextColor={colors.textSecondary}
               value={name}
               onChangeText={(text) => {
                 setname(text);
                 if (nameError) setnameError('');
               }}
-              autoCapitalize="none"
+              autoCapitalize="words"
               autoCorrect={false}
             />
-            {nameError ? <Text style={styles.errorText}>{nameError}</Text> : null}
+            {nameError ? <Text style={[styles.errorText, { color: colors.error }]}>{nameError}</Text> : null}
           </View>
 
           {/* Email Field */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email Address</Text>
+            <Text style={[styles.label, { color: colors.text }]}>Email Address</Text>
             <TextInput
-              style={[styles.input, emailError ? styles.inputError : null]}
+              style={[
+                styles.input, 
+                { 
+                  backgroundColor: colors.inputBackground, 
+                  borderColor: emailError ? colors.error : colors.inputBorder, 
+                  color: colors.text 
+                }
+              ]}
               placeholder="Enter your email address"
-              placeholderTextColor="#999"
+              placeholderTextColor={colors.textSecondary}
               value={email}
               onChangeText={(text) => {
                 setEmail(text);
@@ -231,18 +242,27 @@ const handleSignUp = async () => {
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
+              selectionColor={colors.primary}
             />
-            {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+            {emailError ? <Text style={[styles.errorText, { color: colors.error }]}>{emailError}</Text> : null}
           </View>
 
           {/* Password Field */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Password</Text>
-            <View style={[styles.passwordContainer, passwordError ? styles.inputError : null]}>
+            <Text style={[styles.label, { color: colors.text }]}>Password</Text>
+            <View style={styles.passwordWrapper}>
               <TextInput
-                style={styles.passwordInput}
+                style={[
+                  styles.input, 
+                  { 
+                    backgroundColor: colors.inputBackground, 
+                    borderColor: passwordError ? colors.error : colors.inputBorder, 
+                    color: colors.text,
+                    paddingRight: 50, // Make space for the eye icon
+                  }
+                ]}
                 placeholder="Enter your password"
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textSecondary}
                 value={password}
                 onChangeText={(text) => {
                   setPassword(text);
@@ -254,26 +274,34 @@ const handleSignUp = async () => {
               />
               <TouchableOpacity
                 onPress={togglePasswordVisibility}
-                style={styles.eyeIcon}
+                style={styles.eyeIconAbsolute}
               >
                 <Ionicons
                   name={showPassword ? 'eye-off' : 'eye'}
                   size={24}
-                  color="#999"
+                  color={colors.textSecondary}
                 />
               </TouchableOpacity>
             </View>
-            {passwordError ? <Text style={styles.errorText}>{passwordError}</Text> : null}
+            {passwordError ? <Text style={[styles.errorText, { color: colors.error }]}>{passwordError}</Text> : null}
           </View>
 
           {/* Confirm Password Field */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>Confirm Password</Text>
-            <View style={[styles.passwordContainer, confirmPasswordError ? styles.inputError : null]}>
+            <Text style={[styles.label, { color: colors.text }]}>Confirm Password</Text>
+            <View style={styles.passwordWrapper}>
               <TextInput
-                style={styles.passwordInput}
+                style={[
+                  styles.input, 
+                  { 
+                    backgroundColor: colors.inputBackground, 
+                    borderColor: confirmPasswordError ? colors.error : colors.inputBorder, 
+                    color: colors.text,
+                    paddingRight: 50, // Make space for the eye icon
+                  }
+                ]}
                 placeholder="Confirm your password"
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textSecondary}
                 value={confirmPassword}
                 onChangeText={(text) => {
                   setConfirmPassword(text);
@@ -285,32 +313,32 @@ const handleSignUp = async () => {
               />
               <TouchableOpacity
                 onPress={toggleConfirmPasswordVisibility}
-                style={styles.eyeIcon}
+                style={styles.eyeIconAbsolute}
               >
                 <Ionicons
                   name={showConfirmPassword ? 'eye-off' : 'eye'}
                   size={24}
-                  color="#999"
+                  color={colors.textSecondary}
                 />
               </TouchableOpacity>
             </View>
-            {confirmPasswordError ? <Text style={styles.errorText}>{confirmPasswordError}</Text> : null}
+            {confirmPasswordError ? <Text style={[styles.errorText, { color: colors.error }]}>{confirmPasswordError}</Text> : null}
           </View>
 
           {/* Sign Up Button */}
           <TouchableOpacity
-            style={styles.signUpButton}
+            style={[styles.signUpButton, { backgroundColor: colors.buttonBackground }]}
             onPress={handleSignUp}
             activeOpacity={0.8}
           >
-            <Text style={styles.signUpButtonText}>Sign Up</Text>
+            <Text style={[styles.signUpButtonText, { color: colors.buttonText }]}>Sign Up</Text>
           </TouchableOpacity>
 
           {/* Login Link */}
           <View style={styles.loginContainer}>
-            <Text style={styles.loginText}>Already have an account? </Text>
+            <Text style={[styles.loginText, { color: colors.textSecondary }]}>Already have an account? </Text>
             <TouchableOpacity onPress={onLogin}>
-              <Text style={styles.loginLink}>Login here</Text>
+              <Text style={[styles.loginLink, { color: colors.primary }]}>Login here</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -322,7 +350,6 @@ const handleSignUp = async () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0',
   },
   scrollContainer: {
     flexGrow: 1,
@@ -343,12 +370,10 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#06498e',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
   },
   form: {
     flex: 1,
@@ -359,64 +384,46 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 8,
   },
   asterisk: {
-    color: '#ff4444',
     fontWeight: 'bold',
   },
   input: {
-    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#ddd',
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
-    color: '#333',
     height: 48,
   },
   inputError: {
-    borderColor: '#ff4444',
+    // Error styling handled in component
   },
-  passwordContainer: {
-    flexDirection: 'row',
+  passwordWrapper: {
+    position: 'relative',
+  },
+  eyeIconAbsolute: {
+    position: 'absolute',
+    right: 16,
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    height: 48,
-  },
-  passwordInput: {
-    flex: 1,
-    fontSize: 16,
-    color: '#333',
-    height: '100%',
-    paddingVertical: 0,
-  },
-  eyeIcon: {
     padding: 4,
-    marginLeft: 8,
   },
   errorText: {
-    color: '#ff4444',
     fontSize: 14,
     marginTop: 4,
     marginLeft: 4,
   },
   signUpButton: {
-    backgroundColor: '#06498e',
     paddingVertical: 16,
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 30,
   },
   signUpButtonText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -426,11 +433,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loginText: {
-    color: '#666',
     fontSize: 16,
   },
   loginLink: {
-    color: '#06498e',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -441,13 +446,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,
   },
   successMessage: {
-    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 24,
     alignItems: 'center',
@@ -465,7 +468,6 @@ const styles = StyleSheet.create({
   successText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#4CAF50',
     marginTop: 12,
     textAlign: 'center',
   },

@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Login from '../Login';
 import SignUp from '../SignUp';
+import { useTheme } from '@/contexts/ThemeContext';
 
 const { width, height } = Dimensions.get('window');
 
@@ -22,6 +23,7 @@ interface HomePageProps {
 
 const HomePage: React.FC<HomePageProps> = ({ onLoginPress, onSignUpPress }) => {
   const router = useRouter();
+  const { colors } = useTheme();
   const [showLogin, setShowLogin] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -152,7 +154,7 @@ const HomePage: React.FC<HomePageProps> = ({ onLoginPress, onSignUpPress }) => {
   // If user is logged in and welcome screen should be shown
   if (isLoggedIn && showWelcomeScreen) {
     return (
-      <View style={styles.welcomeContainer}>
+      <View style={[styles.welcomeContainer, { backgroundColor: colors.background }]}>
         <Animated.View style={[styles.welcomeContent, { opacity: fadeAnim }]}>
           {/* App Image */}
           <View style={styles.welcomeImageContainer}>
@@ -164,12 +166,12 @@ const HomePage: React.FC<HomePageProps> = ({ onLoginPress, onSignUpPress }) => {
           </View>
           
           {/* App Name */}
-          <Text style={styles.welcomeAppTitle}>CollegeBuddy</Text>
+          <Text style={[styles.welcomeAppTitle, { color: colors.primary }]}>CollegeBuddy</Text>
           
           {/* Made with heart in India */}
           <View style={styles.heartMessageContainer}>
             <Ionicons name="heart" size={16} color="#e74c3c" />
-            <Text style={styles.heartMessage}>Made with heart in India</Text>
+            <Text style={[styles.heartMessage, { color: colors.textSecondary }]}>Made with heart in India</Text>
           </View>
         </Animated.View>
       </View>
@@ -177,10 +179,10 @@ const HomePage: React.FC<HomePageProps> = ({ onLoginPress, onSignUpPress }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       {/* App Title */}
       <View style={styles.titleContainer}>
-        <Text style={styles.appTitle}>CollegeBuddy</Text>
+        <Text style={[styles.appTitle, { color: colors.primary }]}>CollegeBuddy</Text>
       </View>
       
       {/* Homepage Image */}
@@ -196,20 +198,20 @@ const HomePage: React.FC<HomePageProps> = ({ onLoginPress, onSignUpPress }) => {
       <View style={styles.buttonContainer}>
         {/* Login Button */}
         <TouchableOpacity
-          style={styles.loginButton}
+          style={[styles.loginButton, { backgroundColor: colors.buttonBackground }]}
           onPress={handleLoginPress}
           activeOpacity={0.8}
         >
-          <Text style={styles.loginButtonText}>Login</Text>
+          <Text style={[styles.loginButtonText, { color: colors.buttonText }]}>Login</Text>
         </TouchableOpacity>
 
         {/* Sign Up Button */}
         <TouchableOpacity
-          style={styles.signUpButton}
+          style={[styles.signUpButton, { backgroundColor: colors.textSecondary }]}
           onPress={handleSignUpPress}
           activeOpacity={0.8}
         >
-          <Text style={styles.signUpButtonText}>Sign Up</Text>
+          <Text style={[styles.signUpButtonText, { color: colors.buttonText }]}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -221,7 +223,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
   },
   titleContainer: {
     position: 'absolute',
@@ -234,7 +235,6 @@ const styles = StyleSheet.create({
   appTitle: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#06498e',
     textAlign: 'center',
   },
   imageContainer: {
@@ -256,7 +256,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   loginButton: {
-    backgroundColor: '#06498e',
     paddingVertical: 16,
     paddingHorizontal: 30,
     borderRadius: 8,
@@ -265,12 +264,10 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   loginButtonText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
   signUpButton: {
-    backgroundColor: '#b8b6ba',
     paddingVertical: 16,
     paddingHorizontal: 30,
     borderRadius: 8,
@@ -279,7 +276,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   signUpButtonText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -288,7 +284,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
   },
   welcomeContent: {
     alignItems: 'center',
@@ -308,7 +303,6 @@ const styles = StyleSheet.create({
   welcomeAppTitle: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: '#06498e',
     textAlign: 'center',
     marginBottom: 20,
   },
@@ -319,7 +313,6 @@ const styles = StyleSheet.create({
   },
   heartMessage: {
     fontSize: 16,
-    color: '#666',
     marginLeft: 8,
     fontStyle: 'italic',
   },

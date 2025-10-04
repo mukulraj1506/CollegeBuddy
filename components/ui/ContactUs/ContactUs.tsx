@@ -1,3 +1,4 @@
+import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
@@ -24,6 +25,7 @@ interface ContactUsProps {
 
 const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
   const router = useRouter();
+  const { colors } = useTheme();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
@@ -130,13 +132,13 @@ const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container} edges={['left', 'right']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['left', 'right']}>
       {/* Header */}
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: colors.card, borderBottomColor: colors.border }]}>
         <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#333" />
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Contact Us</Text>
+        <Text style={[styles.headerTitle, { color: colors.text }]}>Contact Us</Text>
         <View style={styles.placeholder} />
       </View>
 
@@ -150,41 +152,41 @@ const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
           showsVerticalScrollIndicator={false}
         >
           {/* Contact Information */}
-          <View style={styles.contactInfoSection}>
-            <Text style={styles.sectionTitle}>Get in Touch</Text>
-            <Text style={styles.sectionSubtitle}>
+          <View style={[styles.contactInfoSection, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>Get in Touch</Text>
+            <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
               We'd love to hear from you. Send us a message and we'll respond as soon as possible.
             </Text>
 
             {/* Contact Methods */}
             <View style={styles.contactMethods}>
-              <View style={styles.contactMethod}>
-                <View style={styles.contactIcon}>
-                  <Ionicons name="mail" size={20} color="#06498e" />
+              <View style={[styles.contactMethod, { backgroundColor: colors.card, shadowColor: colors.shadow }]}>
+                <View style={[styles.contactIcon, { backgroundColor: colors.secondary }]}>
+                  <Ionicons name="mail" size={20} color={colors.primary} />
                 </View>
                 <View style={styles.contactDetails}>
-                  <Text style={styles.contactLabel}>Email</Text>
-                  <Text style={styles.contactValue}>support@collegebuddy.in</Text>
+                  <Text style={[styles.contactLabel, { color: colors.textSecondary }]}>Email</Text>
+                  <Text style={[styles.contactValue, { color: colors.text }]}>support@collegebuddy.in</Text>
                 </View>
               </View>
 
-              <View style={styles.contactMethod}>
-                <View style={styles.contactIcon}>
-                  <Ionicons name="call" size={20} color="#06498e" />
+              <View style={[styles.contactMethod, { backgroundColor: colors.card, shadowColor: colors.shadow }]}>
+                <View style={[styles.contactIcon, { backgroundColor: colors.secondary }]}>
+                  <Ionicons name="call" size={20} color={colors.primary} />
                 </View>
                 <View style={styles.contactDetails}>
-                  <Text style={styles.contactLabel}>Phone</Text>
-                  <Text style={styles.contactValue}>+91 98765 43210</Text>
+                  <Text style={[styles.contactLabel, { color: colors.textSecondary }]}>Phone</Text>
+                  <Text style={[styles.contactValue, { color: colors.text }]}>+91 98765 43210</Text>
                 </View>
               </View>
 
-              <View style={styles.contactMethod}>
-                <View style={styles.contactIcon}>
-                  <Ionicons name="location" size={20} color="#06498e" />
+              <View style={[styles.contactMethod, { backgroundColor: colors.card, shadowColor: colors.shadow }]}>
+                <View style={[styles.contactIcon, { backgroundColor: colors.secondary }]}>
+                  <Ionicons name="location" size={20} color={colors.primary} />
                 </View>
                 <View style={styles.contactDetails}>
-                  <Text style={styles.contactLabel}>Address</Text>
-                  <Text style={styles.contactValue}>123 University Road, Bangalore, Karnataka 560001, India</Text>
+                  <Text style={[styles.contactLabel, { color: colors.textSecondary }]}>Address</Text>
+                  <Text style={[styles.contactValue, { color: colors.text }]}>123 University Road, Bangalore, Karnataka 560001, India</Text>
                 </View>
               </View>
             </View>
@@ -192,17 +194,21 @@ const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
 
           {/* Contact Form */}
           <View style={styles.formSection}>
-            <Text style={styles.sectionTitle}>Send us a Message</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>Send us a Message</Text>
 
             {/* Name Field */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>
-                Name <Text style={styles.asterisk}>*</Text>
+              <Text style={[styles.label, { color: colors.text }]}>
+                Name <Text style={[styles.asterisk, { color: colors.error }]}>*</Text>
               </Text>
               <TextInput
-                style={[styles.input, nameError ? styles.inputError : null]}
+                style={[
+                  styles.input, 
+                  { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text },
+                  nameError ? { borderColor: colors.error } : null
+                ]}
                 placeholder="Enter your full name"
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textSecondary}
                 value={name}
                 onChangeText={(text) => {
                   setName(text);
@@ -211,18 +217,22 @@ const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
                 autoCapitalize="words"
                 autoCorrect={false}
               />
-              {nameError ? <Text style={styles.errorText}>{nameError}</Text> : null}
+              {nameError ? <Text style={[styles.errorText, { color: colors.error }]}>{nameError}</Text> : null}
             </View>
 
             {/* Email Field */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>
-                Email Address <Text style={styles.asterisk}>*</Text>
+              <Text style={[styles.label, { color: colors.text }]}>
+                Email Address <Text style={[styles.asterisk, { color: colors.error }]}>*</Text>
               </Text>
               <TextInput
-                style={[styles.input, emailError ? styles.inputError : null]}
+                style={[
+                  styles.input, 
+                  { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text },
+                  emailError ? { borderColor: colors.error } : null
+                ]}
                 placeholder="Enter your email address"
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textSecondary}
                 value={email}
                 onChangeText={(text) => {
                   setEmail(text);
@@ -232,18 +242,22 @@ const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
                 autoCapitalize="none"
                 autoCorrect={false}
               />
-              {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+              {emailError ? <Text style={[styles.errorText, { color: colors.error }]}>{emailError}</Text> : null}
             </View>
 
             {/* Subject Field */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>
-                Subject <Text style={styles.asterisk}>*</Text>
+              <Text style={[styles.label, { color: colors.text }]}>
+                Subject <Text style={[styles.asterisk, { color: colors.error }]}>*</Text>
               </Text>
               <TextInput
-                style={[styles.input, subjectError ? styles.inputError : null]}
+                style={[
+                  styles.input, 
+                  { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text },
+                  subjectError ? { borderColor: colors.error } : null
+                ]}
                 placeholder="What's this about?"
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textSecondary}
                 value={subject}
                 onChangeText={(text) => {
                   setSubject(text);
@@ -252,18 +266,22 @@ const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
                 autoCapitalize="sentences"
                 autoCorrect={false}
               />
-              {subjectError ? <Text style={styles.errorText}>{subjectError}</Text> : null}
+              {subjectError ? <Text style={[styles.errorText, { color: colors.error }]}>{subjectError}</Text> : null}
             </View>
 
             {/* Message Field */}
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>
-                Message <Text style={styles.asterisk}>*</Text>
+              <Text style={[styles.label, { color: colors.text }]}>
+                Message <Text style={[styles.asterisk, { color: colors.error }]}>*</Text>
               </Text>
               <TextInput
-                style={[styles.textArea, messageError ? styles.inputError : null]}
+                style={[
+                  styles.textArea, 
+                  { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text },
+                  messageError ? { borderColor: colors.error } : null
+                ]}
                 placeholder="Tell us how we can help you..."
-                placeholderTextColor="#999"
+                placeholderTextColor={colors.textSecondary}
                 value={message}
                 onChangeText={(text) => {
                   setMessage(text);
@@ -275,17 +293,21 @@ const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
                 autoCapitalize="sentences"
                 autoCorrect={false}
               />
-              {messageError ? <Text style={styles.errorText}>{messageError}</Text> : null}
+              {messageError ? <Text style={[styles.errorText, { color: colors.error }]}>{messageError}</Text> : null}
             </View>
 
             {/* Submit Button */}
             <TouchableOpacity
-              style={[styles.submitButton, isSubmitting && styles.submitButtonDisabled]}
+              style={[
+                styles.submitButton, 
+                { backgroundColor: colors.buttonBackground },
+                isSubmitting && { backgroundColor: colors.textSecondary }
+              ]}
               onPress={handleSubmit}
               disabled={isSubmitting}
               activeOpacity={0.8}
             >
-              <Text style={styles.submitButtonText}>
+              <Text style={[styles.submitButtonText, { color: colors.buttonText }]}>
                 {isSubmitting ? 'Sending...' : 'Send Message'}
               </Text>
             </TouchableOpacity>
@@ -299,16 +321,13 @@ const ContactUs: React.FC<ContactUsProps> = ({ onBack }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     ...globalStyles.paddingHeader,
-    backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
   },
   backButton: {
     padding: 4,
@@ -316,7 +335,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
   },
   placeholder: {
     width: 32,
@@ -333,20 +351,17 @@ const styles = StyleSheet.create({
   // Contact Info Section
   contactInfoSection: {
     ...globalStyles.paddingSection,
-    backgroundColor: '#f8f9fa',
     marginBottom: 30,
     paddingVertical: 30,
   },
   sectionTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
     marginBottom: 12,
     textAlign: 'center',
   },
   sectionSubtitle: {
     fontSize: 16,
-    color: '#666',
     lineHeight: 24,
     marginBottom: 32,
     textAlign: 'center',
@@ -361,9 +376,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     paddingVertical: 16,
     paddingHorizontal: 16,
-    backgroundColor: '#fff',
     borderRadius: 12,
-    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -376,7 +389,6 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#f0f8ff',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 20,
@@ -388,13 +400,11 @@ const styles = StyleSheet.create({
   },
   contactLabel: {
     fontSize: 14,
-    color: '#666',
     marginBottom: 6,
     fontWeight: '500',
   },
   contactValue: {
     fontSize: 16,
-    color: '#333',
     fontWeight: '600',
     lineHeight: 22,
   },
@@ -408,56 +418,45 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 8,
   },
   asterisk: {
-    color: '#ff4444',
     fontWeight: 'bold',
   },
   input: {
-    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#ddd',
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
-    color: '#333',
     height: 48,
   },
   textArea: {
-    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#ddd',
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontSize: 16,
-    color: '#333',
     height: 120,
   },
   inputError: {
-    borderColor: '#ff4444',
+    // Error styling handled in component
   },
   errorText: {
-    color: '#ff4444',
     fontSize: 14,
     marginTop: 4,
     marginLeft: 4,
   },
   submitButton: {
-    backgroundColor: '#06498e',
     paddingVertical: 16,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 20,
   },
   submitButtonDisabled: {
-    backgroundColor: '#ccc',
+    // Disabled styling handled in component
   },
   submitButtonText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },

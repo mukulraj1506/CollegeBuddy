@@ -1,3 +1,4 @@
+import { useTheme } from '@/contexts/ThemeContext';
 import React from 'react';
 import {
     Modal,
@@ -39,6 +40,7 @@ export const BuyFilterModal: React.FC<BuyFilterModalProps> = ({
   onApplyFilters,
   onClearFilters,
 }) => {
+  const { colors } = useTheme();
   const [localFilters, setLocalFilters] = React.useState<BuyFilters>(filters);
 
   React.useEffect(() => {
@@ -83,56 +85,60 @@ export const BuyFilterModal: React.FC<BuyFilterModalProps> = ({
 
   const renderFilterContent = () => {
     switch (selectedFilter) {
-       case 'priceRange':
-         return (
-           <View style={styles.filterContent}>
-             <View style={styles.priceRangeContainer}>
-               <TextInput
-                 style={styles.priceInput}
-                 placeholder="Min"
-                 keyboardType="numeric"
-                 value={localFilters.priceRange?.min?.toString() || ''}
-                 onChangeText={(text) => {
-                   const min = text ? parseInt(text) : undefined;
-                   setLocalFilters({
-                     ...localFilters,
-                     priceRange: { ...localFilters.priceRange, min: min || 0 }
-                   });
-                 }}
-               />
-               <Text style={styles.priceSeparator}>to</Text>
-               <TextInput
-                 style={styles.priceInput}
-                 placeholder="Max"
-                 keyboardType="numeric"
-                 value={localFilters.priceRange?.max?.toString() || ''}
-                 onChangeText={(text) => {
-                   const max = text ? parseInt(text) : undefined;
-                   setLocalFilters({
-                     ...localFilters,
-                     priceRange: { ...localFilters.priceRange, max: max || 0 }
-                   });
-                 }}
-               />
-             </View>
-           </View>
-         );
+      case 'priceRange':
+        return (
+          <View style={[styles.filterContent, { backgroundColor: colors.background }]}>
+            <View style={styles.priceRangeContainer}>
+              <TextInput
+                style={[styles.priceInput, { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text }]}
+                placeholder="Min"
+                placeholderTextColor={colors.textSecondary}
+                keyboardType="numeric"
+                value={localFilters.priceRange?.min?.toString() || ''}
+                onChangeText={(text) => {
+                  const min = text ? parseInt(text) : undefined;
+                  setLocalFilters({
+                    ...localFilters,
+                    priceRange: { ...localFilters.priceRange, min: min || 0 }
+                  });
+                }}
+              />
+              <Text style={[styles.priceSeparator, { color: colors.textSecondary }]}>to</Text>
+              <TextInput
+                style={[styles.priceInput, { backgroundColor: colors.inputBackground, borderColor: colors.inputBorder, color: colors.text }]}
+                placeholder="Max"
+                placeholderTextColor={colors.textSecondary}
+                keyboardType="numeric"
+                value={localFilters.priceRange?.max?.toString() || ''}
+                onChangeText={(text) => {
+                  const max = text ? parseInt(text) : undefined;
+                  setLocalFilters({
+                    ...localFilters,
+                    priceRange: { ...localFilters.priceRange, max: max || 0 }
+                  });
+                }}
+              />
+            </View>
+          </View>
+        );
 
       case 'datePosted':
         return (
-          <View style={styles.filterContent}>
+          <View style={[styles.filterContent, { backgroundColor: colors.background }]}>
             <View style={styles.optionContainer}>
               {(['asc', 'desc'] as const).map((order) => (
                 <TouchableOpacity
                   key={order}
                   style={[
                     styles.optionButton,
-                    localFilters.datePosted === order && styles.selectedOption
+                    { borderColor: colors.border, backgroundColor: colors.inputBackground },
+                    localFilters.datePosted === order && [styles.selectedOption, { backgroundColor: colors.primary, borderColor: colors.primary }]
                   ]}
                   onPress={() => setLocalFilters({ ...localFilters, datePosted: order })}
                 >
                   <Text style={[
                     styles.optionText,
+                    { color: localFilters.datePosted === order ? colors.buttonText : colors.text },
                     localFilters.datePosted === order && styles.selectedOptionText
                   ]}>
                     {order === 'asc' ? 'Oldest First' : 'Newest First'}
@@ -145,19 +151,21 @@ export const BuyFilterModal: React.FC<BuyFilterModalProps> = ({
 
       case 'priceSort':
         return (
-          <View style={styles.filterContent}>
+          <View style={[styles.filterContent, { backgroundColor: colors.background }]}>
             <View style={styles.optionContainer}>
               {(['low-to-high', 'high-to-low'] as const).map((sort) => (
                 <TouchableOpacity
                   key={sort}
                   style={[
                     styles.optionButton,
-                    localFilters.priceSort === sort && styles.selectedOption
+                    { borderColor: colors.border, backgroundColor: colors.inputBackground },
+                    localFilters.priceSort === sort && [styles.selectedOption, { backgroundColor: colors.primary, borderColor: colors.primary }]
                   ]}
                   onPress={() => setLocalFilters({ ...localFilters, priceSort: sort })}
                 >
                   <Text style={[
                     styles.optionText,
+                    { color: localFilters.priceSort === sort ? colors.buttonText : colors.text },
                     localFilters.priceSort === sort && styles.selectedOptionText
                   ]}>
                     {sort === 'low-to-high' ? 'Low to High' : 'High to Low'}
@@ -170,19 +178,21 @@ export const BuyFilterModal: React.FC<BuyFilterModalProps> = ({
 
       case 'condition':
         return (
-          <View style={styles.filterContent}>
+          <View style={[styles.filterContent, { backgroundColor: colors.background }]}>
             <View style={styles.chipContainer}>
               {CONDITIONS.map((condition) => (
                 <TouchableOpacity
                   key={condition}
                   style={[
                     styles.chip,
-                    localFilters.condition?.includes(condition) && styles.selectedChip
+                    { borderColor: colors.border, backgroundColor: colors.inputBackground },
+                    localFilters.condition?.includes(condition) && [styles.selectedChip, { backgroundColor: colors.primary, borderColor: colors.primary }]
                   ]}
                   onPress={() => toggleCondition(condition)}
                 >
                   <Text style={[
                     styles.chipText,
+                    { color: localFilters.condition?.includes(condition) ? colors.buttonText : colors.text },
                     localFilters.condition?.includes(condition) && styles.selectedChipText
                   ]}>
                     {condition}
@@ -195,19 +205,21 @@ export const BuyFilterModal: React.FC<BuyFilterModalProps> = ({
 
       case 'category':
         return (
-          <View style={styles.filterContent}>
+          <View style={[styles.filterContent, { backgroundColor: colors.background }]}>
             <View style={styles.chipContainer}>
               {CATEGORIES.map((category) => (
                 <TouchableOpacity
                   key={category}
                   style={[
                     styles.chip,
-                    localFilters.category?.includes(category) && styles.selectedChip
+                    { borderColor: colors.border, backgroundColor: colors.inputBackground },
+                    localFilters.category?.includes(category) && [styles.selectedChip, { backgroundColor: colors.primary, borderColor: colors.primary }]
                   ]}
                   onPress={() => toggleCategory(category)}
                 >
                   <Text style={[
                     styles.chipText,
+                    { color: localFilters.category?.includes(category) ? colors.buttonText : colors.text },
                     localFilters.category?.includes(category) && styles.selectedChipText
                   ]}>
                     {category}
@@ -225,34 +237,36 @@ export const BuyFilterModal: React.FC<BuyFilterModalProps> = ({
 
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         {/* Header */}
-        <View style={styles.header}>
+        <View style={[styles.header, { borderBottomColor: colors.border }]}>
           <TouchableOpacity onPress={onClose}>
-            <Text style={styles.cancelButton}>Cancel</Text>
+            <Text style={[styles.cancelButton, { color: colors.textSecondary }]}>Cancel</Text>
           </TouchableOpacity>
-          <Text style={styles.title}>Filters</Text>
+          <Text style={[styles.title, { color: colors.primary }]}>Filters</Text>
           <TouchableOpacity onPress={handleClear}>
-            <Text style={styles.clearButton}>Clear</Text>
+            <Text style={[styles.clearButton, { color: colors.primary }]}>Clear</Text>
           </TouchableOpacity>
         </View>
 
         {/* Main Content */}
         <View style={styles.mainContent}>
           {/* Left Side - Filter Categories */}
-          <View style={styles.leftSide}>
+          <View style={[styles.leftSide, { backgroundColor: colors.surface, borderRightColor: colors.border }]}>
             {filterOptions.map((option) => (
               <TouchableOpacity
                 key={option.key}
                 style={[
                   styles.filterCategory,
-                  selectedFilter === option.key && styles.selectedFilterCategory
+                  { borderBottomColor: colors.border },
+                  selectedFilter === option.key && [styles.selectedFilterCategory, { backgroundColor: colors.card, borderRightColor: colors.primary }]
                 ]}
                 onPress={() => setSelectedFilter(option.key)}
               >
                 <Text style={[
                   styles.filterCategoryText,
-                  selectedFilter === option.key && styles.selectedFilterCategoryText
+                  { color: colors.textSecondary },
+                  selectedFilter === option.key && [styles.selectedFilterCategoryText, { color: colors.primary }]
                 ]}>
                   {option.title}
                 </Text>
@@ -261,7 +275,7 @@ export const BuyFilterModal: React.FC<BuyFilterModalProps> = ({
           </View>
 
           {/* Separator Line */}
-          <View style={styles.separator} />
+          <View style={[styles.separator, { backgroundColor: colors.border }]} />
 
           {/* Right Side - Filter Content */}
           <View style={styles.rightSide}>
@@ -270,9 +284,9 @@ export const BuyFilterModal: React.FC<BuyFilterModalProps> = ({
         </View>
 
         {/* Apply Button */}
-        <View style={styles.footer}>
-          <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
-            <Text style={styles.applyButtonText}>Apply Filters</Text>
+        <View style={[styles.footer, { borderTopColor: colors.border }]}>
+          <TouchableOpacity style={[styles.applyButton, { backgroundColor: colors.buttonBackground }]} onPress={handleApply}>
+            <Text style={[styles.applyButtonText, { color: colors.buttonText }]}>Apply Filters</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -288,6 +302,7 @@ export const SellFilterModal: React.FC<SellFilterModalProps> = ({
   onApplyFilters,
   onClearFilters,
 }) => {
+  const { colors } = useTheme();
   const [localFilters, setLocalFilters] = React.useState<SellFilters>(filters);
   const [selectedFilter, setSelectedFilter] = React.useState<string>('datePosted');
 
@@ -340,19 +355,21 @@ export const SellFilterModal: React.FC<SellFilterModalProps> = ({
     switch (selectedFilter) {
       case 'datePosted':
         return (
-          <View style={styles.filterContent}>
+          <View style={[styles.filterContent, { backgroundColor: colors.background }]}>
             <View style={styles.optionContainer}>
               {(['asc', 'desc'] as const).map((order) => (
                 <TouchableOpacity
                   key={order}
                   style={[
                     styles.optionButton,
-                    localFilters.datePosted === order && styles.selectedOption
+                    { borderColor: colors.border, backgroundColor: colors.inputBackground },
+                    localFilters.datePosted === order && [styles.selectedOption, { backgroundColor: colors.primary, borderColor: colors.primary }]
                   ]}
                   onPress={() => setLocalFilters({ ...localFilters, datePosted: order })}
                 >
                   <Text style={[
                     styles.optionText,
+                    { color: localFilters.datePosted === order ? colors.buttonText : colors.text },
                     localFilters.datePosted === order && styles.selectedOptionText
                   ]}>
                     {order === 'asc' ? 'Oldest First' : 'Newest First'}
@@ -365,19 +382,21 @@ export const SellFilterModal: React.FC<SellFilterModalProps> = ({
 
       case 'status':
         return (
-          <View style={styles.filterContent}>
+          <View style={[styles.filterContent, { backgroundColor: colors.background }]}>
             <View style={styles.chipContainer}>
               {(['Active', 'Sold'] as ItemStatus[]).map((status) => (
                 <TouchableOpacity
                   key={status}
                   style={[
                     styles.chip,
-                    localFilters.status?.includes(status) && styles.selectedChip
+                    { borderColor: colors.border, backgroundColor: colors.inputBackground },
+                    localFilters.status?.includes(status) && [styles.selectedChip, { backgroundColor: colors.primary, borderColor: colors.primary }]
                   ]}
                   onPress={() => toggleStatus(status)}
                 >
                   <Text style={[
                     styles.chipText,
+                    { color: localFilters.status?.includes(status) ? colors.buttonText : colors.text },
                     localFilters.status?.includes(status) && styles.selectedChipText
                   ]}>
                     {status}
@@ -390,19 +409,21 @@ export const SellFilterModal: React.FC<SellFilterModalProps> = ({
 
       case 'condition':
         return (
-          <View style={styles.filterContent}>
+          <View style={[styles.filterContent, { backgroundColor: colors.background }]}>
             <View style={styles.chipContainer}>
               {CONDITIONS.map((condition) => (
                 <TouchableOpacity
                   key={condition}
                   style={[
                     styles.chip,
-                    localFilters.condition?.includes(condition) && styles.selectedChip
+                    { borderColor: colors.border, backgroundColor: colors.inputBackground },
+                    localFilters.condition?.includes(condition) && [styles.selectedChip, { backgroundColor: colors.primary, borderColor: colors.primary }]
                   ]}
                   onPress={() => toggleCondition(condition)}
                 >
                   <Text style={[
                     styles.chipText,
+                    { color: localFilters.condition?.includes(condition) ? colors.buttonText : colors.text },
                     localFilters.condition?.includes(condition) && styles.selectedChipText
                   ]}>
                     {condition}
@@ -415,19 +436,21 @@ export const SellFilterModal: React.FC<SellFilterModalProps> = ({
 
       case 'category':
         return (
-          <View style={styles.filterContent}>
+          <View style={[styles.filterContent, { backgroundColor: colors.background }]}>
             <View style={styles.chipContainer}>
               {CATEGORIES.map((category) => (
                 <TouchableOpacity
                   key={category}
                   style={[
                     styles.chip,
-                    localFilters.category?.includes(category) && styles.selectedChip
+                    { borderColor: colors.border, backgroundColor: colors.inputBackground },
+                    localFilters.category?.includes(category) && [styles.selectedChip, { backgroundColor: colors.primary, borderColor: colors.primary }]
                   ]}
                   onPress={() => toggleCategory(category)}
                 >
                   <Text style={[
                     styles.chipText,
+                    { color: localFilters.category?.includes(category) ? colors.buttonText : colors.text },
                     localFilters.category?.includes(category) && styles.selectedChipText
                   ]}>
                     {category}
@@ -445,34 +468,36 @@ export const SellFilterModal: React.FC<SellFilterModalProps> = ({
 
   return (
     <Modal visible={visible} animationType="slide" presentationStyle="pageSheet">
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
         {/* Header */}
-        <View style={styles.header}>
+        <View style={[styles.header, { borderBottomColor: colors.border }]}>
           <TouchableOpacity onPress={onClose}>
-            <Text style={styles.cancelButton}>Cancel</Text>
+            <Text style={[styles.cancelButton, { color: colors.textSecondary }]}>Cancel</Text>
           </TouchableOpacity>
-          <Text style={styles.title}>Filters</Text>
+          <Text style={[styles.title, { color: colors.primary }]}>Filters</Text>
           <TouchableOpacity onPress={handleClear}>
-            <Text style={styles.clearButton}>Clear</Text>
+            <Text style={[styles.clearButton, { color: colors.primary }]}>Clear</Text>
           </TouchableOpacity>
         </View>
 
         {/* Main Content */}
         <View style={styles.mainContent}>
           {/* Left Side - Filter Categories */}
-          <View style={styles.leftSide}>
+          <View style={[styles.leftSide, { backgroundColor: colors.surface, borderRightColor: colors.border }]}>
             {filterOptions.map((option) => (
               <TouchableOpacity
                 key={option.key}
                 style={[
                   styles.filterCategory,
-                  selectedFilter === option.key && styles.selectedFilterCategory
+                  { borderBottomColor: colors.border },
+                  selectedFilter === option.key && [styles.selectedFilterCategory, { backgroundColor: colors.card, borderRightColor: colors.primary }]
                 ]}
                 onPress={() => setSelectedFilter(option.key)}
               >
                 <Text style={[
                   styles.filterCategoryText,
-                  selectedFilter === option.key && styles.selectedFilterCategoryText
+                  { color: colors.textSecondary },
+                  selectedFilter === option.key && [styles.selectedFilterCategoryText, { color: colors.primary }]
                 ]}>
                   {option.title}
                 </Text>
@@ -481,7 +506,7 @@ export const SellFilterModal: React.FC<SellFilterModalProps> = ({
           </View>
 
           {/* Separator Line */}
-          <View style={styles.separator} />
+          <View style={[styles.separator, { backgroundColor: colors.border }]} />
 
           {/* Right Side - Filter Content */}
           <View style={styles.rightSide}>
@@ -490,9 +515,9 @@ export const SellFilterModal: React.FC<SellFilterModalProps> = ({
         </View>
 
         {/* Apply Button */}
-        <View style={styles.footer}>
-          <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
-            <Text style={styles.applyButtonText}>Apply Filters</Text>
+        <View style={[styles.footer, { borderTopColor: colors.border }]}>
+          <TouchableOpacity style={[styles.applyButton, { backgroundColor: colors.buttonBackground }]} onPress={handleApply}>
+            <Text style={[styles.applyButtonText, { color: colors.buttonText }]}>Apply Filters</Text>
           </TouchableOpacity>
         </View>
       </View>

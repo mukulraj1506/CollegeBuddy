@@ -1,3 +1,4 @@
+import { useTheme } from '@/contexts/ThemeContext';
 import React, { useMemo, useState } from 'react';
 import {
     ScrollView,
@@ -42,6 +43,7 @@ const ItemList: React.FC<ItemListProps> = ({
   showFilters = true,
   showStatus = false
 }) => {
+  const { colors } = useTheme();
   // Search and filter state
   const [searchAndFilter, setSearchAndFilter] = useState<SearchAndFilterState<BuyFilters>>({
     searchQuery: '',
@@ -158,7 +160,7 @@ const ItemList: React.FC<ItemListProps> = ({
 
       {/* Items List or No Results */}
       {filteredItems.length > 0 ? (
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        <ScrollView style={[styles.container, { backgroundColor: colors.background }]} showsVerticalScrollIndicator={false}>
           {filteredItems.map((item) => (
             <ItemCard
               key={item.id}

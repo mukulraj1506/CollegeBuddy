@@ -1,3 +1,4 @@
+import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
@@ -34,6 +35,7 @@ interface ItemCardProps {
 
 const ItemCard: React.FC<ItemCardProps> = ({ item, onPress, showStatus = false }) => {
   const router = useRouter();
+  const { colors } = useTheme();
 
   const handlePress = () => {
     onPress?.(item);
@@ -60,28 +62,28 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, onPress, showStatus = false }
   };
 
   return (
-    <TouchableOpacity style={styles.card} onPress={handlePress} activeOpacity={0.7}>
+    <TouchableOpacity style={[styles.card, { backgroundColor: colors.card, shadowColor: colors.shadow }]} onPress={handlePress} activeOpacity={0.7}>
       {/* Item Image */}
       <View style={styles.imageContainer}>
         <Image source={item.image} style={styles.image} />
-        <View style={styles.conditionBadge}>
+        <View style={[styles.conditionBadge, { backgroundColor: colors.success }]}>
           <Text style={styles.conditionText}>{item.condition}</Text>
         </View>
       </View>
 
       {/* Item Details */}
       <View style={styles.detailsContainer}>
-        <Text style={styles.itemName} numberOfLines={2}>
+        <Text style={[styles.itemName, { color: colors.text }]} numberOfLines={2}>
           {item.name}
         </Text>
         
-        <Text style={styles.price}>{item.price}</Text>
+        <Text style={[styles.price, { color: colors.primary }]}>{item.price}</Text>
         
         {showStatus && item.status && (
           <View style={styles.statusContainer}>
             <Text style={[
               styles.statusText,
-              { color: item.status === 'Sold' ? '#4CAF50' : '#FF9800' }
+              { color: item.status === 'Sold' ? colors.success : colors.warning }
             ]}>
               {item.status}
             </Text>
@@ -89,20 +91,20 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, onPress, showStatus = false }
         )}
         
         <View style={styles.sellerInfo}>
-          <Ionicons name="person-outline" size={16} color="#666" />
-          <Text style={styles.sellerText}>{item.seller}</Text>
+          <Ionicons name="person-outline" size={16} color={colors.textSecondary} />
+          <Text style={[styles.sellerText, { color: colors.textSecondary }]}>{item.seller}</Text>
         </View>
         
         <View style={styles.locationInfo}>
-          <Ionicons name="location-outline" size={16} color="#666" />
-          <Text style={styles.locationText}>{item.location}</Text>
+          <Ionicons name="location-outline" size={16} color={colors.textSecondary} />
+          <Text style={[styles.locationText, { color: colors.textSecondary }]}>{item.location}</Text>
         </View>
       </View>
       
       {/* View Details Button */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.viewDetailsButton} onPress={handleViewDetails}>
-          <Text style={styles.viewDetailsButtonText}>View Details</Text>
+        <TouchableOpacity style={[styles.viewDetailsButton, { backgroundColor: colors.buttonBackground }]} onPress={handleViewDetails}>
+          <Text style={[styles.viewDetailsButtonText, { color: colors.buttonText }]}>View Details</Text>
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
@@ -112,11 +114,9 @@ const ItemCard: React.FC<ItemCardProps> = ({ item, onPress, showStatus = false }
 const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
     borderRadius: 12,
     ...globalStyles.paddingCard,
     marginBottom: 12,
-    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -141,7 +141,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -3,
     right: -3,
-    backgroundColor: '#4CAF50',
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 8,
@@ -159,14 +158,12 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 4,
     lineHeight: 18,
   },
   price: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#06498e',
     marginBottom: 4,
   },
   sellerInfo: {
@@ -176,7 +173,6 @@ const styles = StyleSheet.create({
   },
   sellerText: {
     fontSize: 12,
-    color: '#666',
     marginLeft: 4,
   },
   locationInfo: {
@@ -186,7 +182,6 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 12,
-    color: '#666',
     marginLeft: 4,
   },
   statusContainer: {
@@ -203,7 +198,6 @@ const styles = StyleSheet.create({
     paddingLeft: 8,
   },
   viewDetailsButton: {
-    backgroundColor: '#06498e',
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 6,
@@ -211,7 +205,6 @@ const styles = StyleSheet.create({
     minWidth: 80,
   },
   viewDetailsButtonText: {
-    color: '#fff',
     fontSize: 12,
     fontWeight: '600',
   },

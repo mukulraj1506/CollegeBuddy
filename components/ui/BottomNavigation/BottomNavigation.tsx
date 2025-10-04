@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface BottomNavigationProps {
   activeTab: 'Buy' | 'Sell' | 'Wishlist' | 'Chats';
@@ -16,6 +17,7 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
   activeTab,
   onTabPress,
 }) => {
+  const { colors } = useTheme();
   const tabs = [
     { key: 'Buy' as const, icon: 'cart', label: 'Buy' },
     { key: 'Sell' as const, icon: 'add-circle-outline', label: 'Sell' },
@@ -24,25 +26,26 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
   ];
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.card, borderTopColor: colors.border, shadowColor: colors.shadow }]}>
       {tabs.map((tab) => (
         <TouchableOpacity
           key={tab.key}
           style={[
             styles.tab,
-            activeTab === tab.key && styles.activeTab,
+            activeTab === tab.key && [styles.activeTab, { backgroundColor: colors.secondary }],
           ]}
           onPress={() => onTabPress(tab.key)}
         >
           <Ionicons
             name={tab.icon as any}
             size={20}
-            color={activeTab === tab.key ? '#06498e' : '#666'}
+            color={activeTab === tab.key ? colors.primary : colors.textSecondary}
           />
           <Text
             style={[
               styles.tabLabel,
-              activeTab === tab.key && styles.activeTabLabel,
+              { color: colors.textSecondary },
+              activeTab === tab.key && [styles.activeTabLabel, { color: colors.primary }],
             ]}
           >
             {tab.label}
@@ -56,12 +59,9 @@ const BottomNavigation: React.FC<BottomNavigationProps> = ({
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
     borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
     paddingVertical: 6,
     paddingHorizontal: 12,
-    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: -2,
@@ -79,17 +79,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
   activeTab: {
-    backgroundColor: '#f0f8ff',
     borderRadius: 6,
   },
   tabLabel: {
     fontSize: 12,
-    color: '#666',
     marginLeft: 6,
     fontWeight: '500',
   },
   activeTabLabel: {
-    color: '#06498e',
     fontWeight: '600',
   },
 });
