@@ -1,14 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import {
-  Alert,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    Image,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { globalStyles } from '../../../styles/globalStyles';
 
@@ -96,7 +96,9 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
     >
       {/* Title Section */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Title *</Text>
+        <Text style={styles.sectionTitle}>
+          Title <Text style={styles.asterisk}>*</Text>
+        </Text>
         <TextInput
           style={styles.input}
           placeholder="e.g., Scientific Calculator or Calculus Textbook"
@@ -108,7 +110,9 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
 
       {/* Description Section */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Description *</Text>
+        <Text style={styles.sectionTitle}>
+          Description <Text style={styles.asterisk}>*</Text>
+        </Text>
         <TextInput
           style={[styles.input, styles.textArea]}
           placeholder="Describe your item in detail..."
@@ -165,7 +169,9 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
 
       {/* Category Section */}
       <View style={[styles.section, { zIndex: showCategoryDropdown ? 1000 : 1 }]}>
-        <Text style={styles.sectionTitle}>Category *</Text>
+        <Text style={styles.sectionTitle}>
+          Category <Text style={styles.asterisk}>*</Text>
+        </Text>
         <View style={{ position: 'relative' }}>
           <TouchableOpacity
             style={globalStyles.dropdown}
@@ -240,7 +246,9 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
 
       {/* Condition Section */}
       <View style={[styles.section, { zIndex: showConditionDropdown ? 1000 : 1 }]}>
-        <Text style={styles.sectionTitle}>Condition *</Text>
+        <Text style={styles.sectionTitle}>
+          Condition <Text style={styles.asterisk}>*</Text>
+        </Text>
         <View style={{ position: 'relative' }}>
           <TouchableOpacity
             style={globalStyles.dropdown}
@@ -315,7 +323,9 @@ const SellNewItem: React.FC<SellNewItemProps> = ({ onSubmit }) => {
 
       {/* Price Section */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Price *</Text>
+        <Text style={styles.sectionTitle}>
+          Price <Text style={styles.asterisk}>*</Text>
+        </Text>
         <View style={styles.priceContainer}>
           <Text style={styles.currencySymbol}>₹</Text>
           <TextInput
@@ -375,6 +385,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#333',
     marginBottom: 8,
+  },
+  asterisk: {
+    color: '#ff4444',
+    fontWeight: 'bold',
   },
   sectionSubtitle: {
     fontSize: 14,

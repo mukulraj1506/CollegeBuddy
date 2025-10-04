@@ -11,6 +11,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../../../styles/globalStyles';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -97,7 +98,7 @@ const ItemDetailsPage: React.FC<ItemDetailsPageProps> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
@@ -260,7 +261,7 @@ const ItemDetailsPage: React.FC<ItemDetailsPageProps> = ({
           <Text style={styles.contactButtonText}>Contact Seller</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -268,6 +269,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    width: '100%',
+    maxWidth: '100%',
   },
   header: {
     flexDirection: 'row',
@@ -291,18 +294,19 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingBottom: 100, // Add padding to prevent content from being hidden behind fixed buttons
+    paddingBottom: 120, // Increased padding to prevent content from being hidden behind fixed buttons
+    width: '100%',
   },
   // Photos Section
   photosSection: {
     marginBottom: 20,
   },
   imageCarousel: {
-    height: 250,
+    height: Math.min(screenWidth * 0.75, 300), // Responsive height based on screen width
   },
   imageContainer: {
     width: screenWidth,
-    height: 250,
+    height: Math.min(screenWidth * 0.75, 300), // Responsive height based on screen width
     position: 'relative',
   },
   carouselImage: {
@@ -341,7 +345,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#06498e',
   },
   noImageContainer: {
-    height: 250,
+    height: Math.min(screenWidth * 0.75, 300), // Responsive height based on screen width
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f5f5f5',
@@ -356,18 +360,18 @@ const styles = StyleSheet.create({
     ...globalStyles.paddingSection,
   },
   itemTitle: {
-    fontSize: 24,
+    fontSize: Math.min(screenWidth * 0.06, 24), // Responsive font size
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 8,
-    lineHeight: 30,
+    lineHeight: Math.min(screenWidth * 0.075, 30), // Responsive line height
   },
   priceContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   price: {
-    fontSize: 28,
+    fontSize: Math.min(screenWidth * 0.07, 28), // Responsive font size
     fontWeight: 'bold',
     color: '#06498e',
     marginRight: 12,
@@ -495,6 +499,8 @@ const styles = StyleSheet.create({
     borderTopColor: '#e0e0e0',
     paddingTop: 12,
     paddingBottom: 12,
+    width: '100%',
+    maxWidth: '100%',
   },
   wishlistButton: {
     flex: 1,

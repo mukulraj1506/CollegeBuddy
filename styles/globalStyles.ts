@@ -153,20 +153,20 @@ export const globalStyles = StyleSheet.create({
     padding: 12,
   },
   paddingSection: {
-    paddingHorizontal: 10,
-    marginBottom: 10,
+    paddingHorizontal: 16,
+    marginBottom: 16,
   },
   paddingHeader: {
-    paddingHorizontal: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 16,
   },
   paddingContent: {
-    paddingHorizontal: 10,
-    paddingTop:  10,
+    paddingHorizontal: 16,
+    paddingTop: 16,
   },
   paddingActionButtons: {
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
   },
 });

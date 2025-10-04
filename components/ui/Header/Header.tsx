@@ -1,15 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-  Animated,
-  Dimensions,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Animated,
+    Dimensions,
+    Image,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { globalStyles } from '../../../styles/globalStyles';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -39,8 +41,10 @@ const Header: React.FC<HeaderProps> = ({
   hasNotifications = false,
   showSearchIcon = true,
 }) => {
+  const router = useRouter();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [slideAnim] = useState(new Animated.Value(screenWidth));
+  const sidebarWidth = screenWidth; // Take full screen width
+  const [slideAnim] = useState(new Animated.Value(sidebarWidth));
 
   const handleProfilePress = () => {
     setShowProfileMenu(true);
@@ -56,7 +60,7 @@ const Header: React.FC<HeaderProps> = ({
 
   const closeSidebar = () => {
     Animated.timing(slideAnim, {
-      toValue: screenWidth,
+      toValue: sidebarWidth,
       duration: 300,
       useNativeDriver: true,
     }).start(() => {
@@ -68,9 +72,13 @@ const Header: React.FC<HeaderProps> = ({
     closeSidebar();
     switch (option) {
       case 'edit':
+        // Navigate to Edit Profile page
+        router.push('/edit-profile' as any);
         onEditProfile?.();
         break;
       case 'contact':
+        // Navigate to Contact Us page
+        router.push('/contact-us' as any);
         onContactUs?.();
         break;
       case 'logout':
@@ -135,15 +143,16 @@ const Header: React.FC<HeaderProps> = ({
               }
             ]}
           >
-            {/* Back Button Header */}
-            <View style={styles.sidebarHeader}>
-              <TouchableOpacity onPress={closeSidebar} style={styles.backButton}>
-                <Ionicons name="arrow-back" size={24} color="#333" />
-              </TouchableOpacity>
-            </View>
+            <SafeAreaView style={styles.sidebarSafeArea} edges={['top', 'left', 'right']}>
+              {/* Back Button Header */}
+              <View style={styles.sidebarHeader}>
+                <TouchableOpacity onPress={closeSidebar} style={styles.backButton}>
+                  <Ionicons name="arrow-back" size={24} color="#333" />
+                </TouchableOpacity>
+              </View>
 
-            {/* Scrollable Content */}
-            <ScrollView style={styles.sidebarContent} showsVerticalScrollIndicator={false}>
+              {/* Scrollable Content */}
+              <ScrollView style={styles.sidebarContent} showsVerticalScrollIndicator={false}>
               {/* User Profile Section */}
               <View style={styles.userProfileSection}>
                 <View style={styles.userAvatar}>
@@ -158,6 +167,7 @@ const Header: React.FC<HeaderProps> = ({
                 <TouchableOpacity 
                   style={styles.menuItem}
                   onPress={() => handleMenuOption('edit')}
+                  activeOpacity={0.7}
                 >
                   <Ionicons name="create-outline" size={24} color="#06498e" />
                   <Text style={styles.menuItemText}>Edit Profile</Text>
@@ -167,6 +177,7 @@ const Header: React.FC<HeaderProps> = ({
                 <TouchableOpacity 
                   style={styles.menuItem}
                   onPress={() => handleMenuOption('contact')}
+                  activeOpacity={0.7}
                 >
                   <Ionicons name="mail-outline" size={24} color="#06498e" />
                   <Text style={styles.menuItemText}>Contact Us</Text>
@@ -189,6 +200,7 @@ const Header: React.FC<HeaderProps> = ({
                 <Text style={styles.logoutText}>Logout</Text>
               </TouchableOpacity>
             </View>
+            </SafeAreaView>
           </Animated.View>
         </>
       )}
@@ -262,7 +274,7 @@ const styles = StyleSheet.create({
     top: 0,
     right: 0,
     bottom: 0,
-    width: screenWidth,
+    width: screenWidth, // Take full screen width
     backgroundColor: '#fff',
     zIndex: 1001,
     shadowColor: '#000',
@@ -274,28 +286,34 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  sidebarSafeArea: {
+    flex: 1,
+    width: '100%',
+  },
   sidebarContent: {
     flex: 1,
     paddingBottom: 20,
+    width: '100%',
   },
   sidebarHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-    paddingTop: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
+    width: '100%',
   },
   backButton: {
     padding: 8,
   },
   userProfileSection: {
     alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 10,
+    paddingVertical: 30,
+    paddingHorizontal: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
+    width: '100%',
   },
   userAvatar: {
     marginBottom: 16,
@@ -311,15 +329,21 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   menuContainer: {
-    paddingTop: 10,
+    paddingTop: 16,
+    width: '100%',
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
+    width: '100%',
+    backgroundColor: '#fff',
+  },
+  menuItemPressed: {
+    backgroundColor: '#f0f8ff',
   },
   menuItemText: {
     fontSize: 16,
@@ -328,15 +352,20 @@ const styles = StyleSheet.create({
     flex: 1,
     fontWeight: '500',
   },
+  menuItemIcon: {
+    marginRight: 8,
+  },
   sidebarFooter: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    paddingVertical: 10,
-    paddingBottom: 10,
+    paddingVertical: 16,
+    paddingBottom: 16,
+    borderTopWidth: 1,
     borderTopColor: '#e0e0e0',
     backgroundColor: '#fff',
+    width: '100%',
   },
   madeWithLove: {
     fontSize: 14,

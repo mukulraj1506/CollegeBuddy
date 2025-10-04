@@ -36,6 +36,7 @@ const SignUp: React.FC<SignUpProps> = ({
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   // Email validation function
   const validateEmail = (email: string): boolean => {
@@ -134,8 +135,15 @@ const handleSignUp = async () => {
 
     console.log("Signup success:", dummyResponse.data);
 
-    // Optionally, navigate to login or dashboard after signup
-    // router.push("/login" as any);
+    // Show success message
+    setShowSuccessMessage(true);
+
+    // Hide success message after 1 second
+    setTimeout(() => {
+      setShowSuccessMessage(false);
+      // Optionally, navigate to login or dashboard after signup
+      // router.push("/login" as any);
+    }, 1000);
 
   } catch (error: any) {
     console.error("Signup failed:", error.message);
@@ -163,6 +171,16 @@ const handleSignUp = async () => {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
+      {/* Success Message Overlay */}
+      {showSuccessMessage && (
+        <View style={styles.successOverlay}>
+          <View style={styles.successMessage}>
+            <Ionicons name="checkmark-circle" size={32} color="#4CAF50" />
+            <Text style={styles.successText}>Signup Successful!</Text>
+          </View>
+        </View>
+      )}
+      
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
@@ -180,7 +198,9 @@ const handleSignUp = async () => {
         <View style={styles.form}>
           {/* name Field */}
           <View style={styles.inputContainer}>
-            <Text style={styles.label}>name *</Text>
+            <Text style={styles.label}>
+              name <Text style={styles.asterisk}>*</Text>
+            </Text>
             <TextInput
               style={[styles.input, nameError ? styles.inputError : null]}
               placeholder="Enter your name"
@@ -342,6 +362,10 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 8,
   },
+  asterisk: {
+    color: '#ff4444',
+    fontWeight: 'bold',
+  },
   input: {
     backgroundColor: '#fff',
     borderWidth: 1,
@@ -409,6 +433,41 @@ const styles = StyleSheet.create({
     color: '#06498e',
     fontSize: 16,
     fontWeight: '600',
+  },
+  // Success Message Styles
+  successOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  successMessage: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 200,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  successText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#4CAF50',
+    marginTop: 12,
+    textAlign: 'center',
   },
 });
 

@@ -35,6 +35,7 @@ const Login: React.FC<LoginProps> = ({
   const [showPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   // Email validation function
   const validateEmail = (email: string): boolean => {
@@ -90,11 +91,18 @@ const Login: React.FC<LoginProps> = ({
 
     console.log("Login success:", dummyResponse.data);
 
-    // Example: save token locally (if backend returns it)
-    // await AsyncStorage.setItem("token", dummyResponse.data.token);
+    // Show success message
+    setShowSuccessMessage(true);
 
-    // Navigate to home/dashboard after successful login
-    onLoginSuccess?.();
+    // Hide success message after 1 second and then navigate
+    setTimeout(() => {
+      setShowSuccessMessage(false);
+      // Example: save token locally (if backend returns it)
+      // await AsyncStorage.setItem("token", dummyResponse.data.token);
+
+      // Navigate to home/dashboard after successful login
+      onLoginSuccess?.();
+    }, 1000);
 
   } catch (error: any) {
     console.error("Login failed:", error.message);
@@ -120,6 +128,16 @@ const Login: React.FC<LoginProps> = ({
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
+      {/* Success Message Overlay */}
+      {showSuccessMessage && (
+        <View style={styles.successOverlay}>
+          <View style={styles.successMessage}>
+            <Ionicons name="checkmark-circle" size={32} color="#4CAF50" />
+            <Text style={styles.successText}>Login Successful!</Text>
+          </View>
+        </View>
+      )}
+      
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
@@ -331,6 +349,41 @@ const styles = StyleSheet.create({
     color: '#06498e',
     fontSize: 16,
     fontWeight: '600',
+  },
+  // Success Message Styles
+  successOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  successMessage: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 200,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  successText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#4CAF50',
+    marginTop: 12,
+    textAlign: 'center',
   },
 });
 
